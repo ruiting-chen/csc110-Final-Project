@@ -19,6 +19,19 @@ class SeaLevel:
 
 
 @dataclass
+class Temperature:
+    """Store the global temperature of each month of each year which has a valid measurement.
+
+    There are two different temperatures as described in instance variables.
+
+    Instance Variables:
+        - date: The date at when the sea-level is recorded. (data is recorded each month
+        - temperature: The Global temperature anomaly of a given month"""
+    date: datetime.date
+    temperature: float
+
+
+@dataclass
 class Station:
     """Record each station and its all sea-level data.
 
@@ -28,19 +41,9 @@ class Station:
             - location: location of the station, represented in (longitude, latitude)
         """
     sea_level: List[SeaLevel]
-    # temperature
+    temperature: List[Temperature]
     name: str
     location: Tuple[float, float]
-
-
-@dataclass
-class Temperature:
-    """Store the global temperature of each month of each year which has a valid measurement.
-
-    There are two different temperatures as described in instance variables.
-
-    Instance Variables:
-        - """
 
 
 if __name__ == '__main__':
