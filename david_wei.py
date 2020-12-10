@@ -78,8 +78,13 @@ class SeaLevel:
     height: int
 
     def __init__(self, lst: List[int]):
+        """Initialize a SeaLevel object"""
         self.date = datetime.date(lst[0], lst[1], lst[2])
         self.height = lst[3]
+
+    def __ge__(self, other):
+        """Greater than or equal to."""
+        return self.height >= other.height
 
 
 class Station:
