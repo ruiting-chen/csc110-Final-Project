@@ -8,10 +8,10 @@ from statistics import mean
 
 url = 'http://uhslc.soest.hawaii.edu/data/fd.html'
 
-
-def get_sea_level_info(link: str) -> List[List[str]]:
-    """Return a list of sea level information extracted from the given html"""
-    r = requests.get(link).text
+def get_sea_level_info() -> List[List[str]]:
+    """Return a list of sea level information extracted from the website we found.
+    The url of the website is 'http://uhslc.soest.hawaii.edu/data/fd.html'"""
+    r = requests.get('http://uhslc.soest.hawaii.edu/data/fd.html').text
     soup = BeautifulSoup(r, features="html.parser")
     info = soup.find_all('td')
     try_lst = []
