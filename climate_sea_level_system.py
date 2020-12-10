@@ -41,7 +41,11 @@ class ClimateSeaLevelSystem:
 
         Return whether the temperature was successfully added to this system.
         """
-        raise NotImplementedError
+        identifier = temperature.date
+        if identifier in self._temperatures:
+            return False
+        self._temperatures[identifier] = temperature
+        return True
 
     def add_sea_level(self, sea_level: SeaLevel) -> bool:
         """Add the given SeaLevel to this system.
