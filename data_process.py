@@ -49,7 +49,13 @@ def process_temperature_data() -> List[List[Any]]:
     for resource in package.resources:
         if resource.descriptor['name'] == 'monthly_csv':
             temp_raw_lst = resource.read()
-            return [temp_raw_lst[i][1:] for i in range(0, len(temp_raw_lst)) if i % 2 == 0]
+            temp_lst = [temp_raw_lst[i][1:] for i in range(0, len(temp_raw_lst)) if i % 2 == 0]
+
+    # change the temperature in temp_lst to float type
+    for data in temp_lst:
+        data[1] = float(data[1])
+
+    return temp_lst
 
 
 def average(station: Station) -> Dict[datetime.date, int]:
@@ -85,7 +91,7 @@ def process_sea_level_csv(station: Station) -> List[List[Any]]:
 
     lst = []
     for row in read:
-        if int(row[3]) > 0:
+        if int(row[3]) >= 0:
             date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
             height = row[3]
             new_lst = [date, height]
