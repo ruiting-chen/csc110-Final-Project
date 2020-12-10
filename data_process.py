@@ -56,7 +56,7 @@ def average(station: Station) -> Dict[datetime.date, int]:
     return average_dict
 
 
-def process_data(station: Station) -> list:
+def process_data(station: Station) -> List[List[Any]]:
     """This function will extract sea-level data from the internet.
 
     This function will promote the caller to type in a station that he want to check out.
@@ -79,7 +79,12 @@ def process_data(station: Station) -> list:
 
     lst = []
     for row in read:
-        lst.append(row)
+        if row[3] < 0:
+            continue
+        date = datetime.date(row[0], row[1], row[2])
+        height = row[3]
+        new_lst = [date, height]
+        lst.append(new_lst)
     return lst
 
 
