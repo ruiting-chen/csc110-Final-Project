@@ -1,9 +1,10 @@
-from typing import Any, List
+from typing import Any, List, Dict
 from bs4 import BeautifulSoup
 import requests
 import csv
 import urllib.request
 import datetime
+from statistics import mean
 
 url = 'http://uhslc.soest.hawaii.edu/data/fd.html'
 
@@ -72,6 +73,8 @@ class SeaLevel:
 
     def __init__(self, lst: List[int]):
         """Initialize a SeaLevel object"""
+        if lst[3] < 0:
+            return
         self.date = datetime.date(lst[0], lst[1], lst[2])
         self.height = lst[3]
 
@@ -96,3 +99,23 @@ class Station:
         for detail in lst:
             measure = SeaLevel(detail)
             self.sea_level.append(measure)
+
+    def average(self) -> Dict[datetime.date, int]:
+        """Return a dictionary containing each month of each year that have valid measurements and
+         the average of all measurements during that month."""
+        average = {}
+        date = datetime.date(1000, 1, 1)
+        height = 0
+        for measure in self.sea_level:
+            year_month = datetime.date(measure.date.year, measure.date.month, 1)
+            if year_month not in average:
+                average[year_month] = [measure.height]
+            else:
+                average[year_month].append(measure.height)
+
+        for month in average:
+            mean_height = mean(average[month])
+            average[month] = mean_height
+
+        return average
+
