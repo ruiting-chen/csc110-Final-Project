@@ -9,7 +9,7 @@ from statistics import mean
 import urllib.request
 
 
-def process_sea_level_info() -> List[List[str]]:
+def get_sea_level_data() -> List[List[str]]:
     """Return a list of sea level information extracted from the website we found.
     The url of the website is http://uhslc.soest.hawaii.edu/data/fd.html"""
     r = requests.get('http://uhslc.soest.hawaii.edu/data/fd.html').text
@@ -23,6 +23,19 @@ def process_sea_level_info() -> List[List[str]]:
         new_l.append(info[i * 12 + 9].find_all('a')[0].get('href'))
         info_lst.append(new_l)
     return info_lst
+
+
+def process_sea_level_data() -> dict:
+    """Return a list of sea level data in the form that we are going to use"""
+    all_data = get_sea_level_data()
+    useful_data = {}
+    for data in all_data:
+        l = [(float(data[5]), float(data[4])), data[8]]
+        useful_data[data[2]] = l
+    return useful_data
+
+
+processed_sea_level_data = process_sea_level_data()
 
 
 def process_temperature_data() -> List[List[Any]]:
@@ -56,7 +69,7 @@ def average(station: Station) -> Dict[datetime.date, int]:
     return average_dict
 
 
-def process_data(station: Station) -> List[List[Any]]:
+def process_sea_level_csv(station: Station) -> List[List[Any]]:
     """This function will extract sea-level data from the internet.
 
     This function will promote the caller to type in a station that he want to check out.
@@ -65,7 +78,8 @@ def process_data(station: Station) -> List[List[Any]]:
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
 
-    all_data = process_sea_level_info()
+    all_data = get_sea_level_data()
+
     all_station = {}
     for lst in all_data:
         all_station[lst[2]] = lst[-1]
