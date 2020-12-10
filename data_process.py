@@ -78,8 +78,6 @@ def process_sea_level_csv(station: Station) -> List[List[Any]]:
     sea-level data from the internet.
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
-
-
     csv_web = processed_sea_level_data[station][1]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
@@ -87,12 +85,11 @@ def process_sea_level_csv(station: Station) -> List[List[Any]]:
 
     lst = []
     for row in read:
-        if int(row[3]) < 0:
-            continue
-        date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
-        height = row[3]
-        new_lst = [date, height]
-        lst.append(new_lst)
+        if int(row[3]) > 0:
+            date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
+            height = row[3]
+            new_lst = [date, height]
+            lst.append(new_lst)
     return lst
 
 
