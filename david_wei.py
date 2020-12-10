@@ -1,121 +1,89 @@
-from typing import Any, List, Dict
-from bs4 import BeautifulSoup
-import requests
-import csv
-import urllib.request
+from __future__ import annotations
+
 import datetime
-from statistics import mean
+from typing import List, Dict, Optional
 
-url = 'http://uhslc.soest.hawaii.edu/data/fd.html'
-
-
-def get_sea_level_info(link: str) -> List[List[str]]:
-    """Return a list of sea level information extracted from the given html"""
-    r = requests.get(link).text
-    soup = BeautifulSoup(r, features="html.parser")
-    info = soup.find_all('td')
-    try_lst = []
-    for i in range(len(info) // 12):
-        new_l = []
-        for j in range(0, 8):
-            new_l.append(info[i * 12 + j].text)
-        new_l.append(info[i * 12 + 9].find_all('a')[0].get('href'))
-        try_lst.append(new_l)
-    return try_lst
+# This is the Python module containing the individual entity data classes.
+from entities import Temperature, Station, SeaLevel
 
 
-def process_data() -> list:
-    """This function will extract sea-level data from the internet.
+class ClimateSeaLevelSystem:
+    """A system that maintains all entities (temperature, station, and sea-level).
 
-    This function will promote the caller to type in a station that he want to check out.
-    Base on the station the user typed in, this function will extract the corresponding
-    sea-level data from the internet.
-
-    If the input station is not among the ones promoted, an InvalidStationError will occur."""
-    all_data = get_sea_level_info(url)
-    all_station = {}
-    for lst in all_data:
-        all_station[lst[2]] = lst[-1]
-    station = input(f'Which station do you want to see? Choose from {list(all_station.keys())}')
-    if station not in all_station:
-        raise InvalidStationError
-
-    csv_web = all_station[station]
-    csv_file = urllib.request.urlopen(csv_web)
-    lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
-    read = csv.reader(lst_line)
-
-    lst = []
-    for row in read:
-        lst.append(row)
-    return lst
-
-
-class InvalidStationError(Exception):
-    """This exception will raise if the input station is not among the ones promoted."""
-
-    def __str__(self):
-        return 'The input station is not among the ones promoted.'
-
-
-class SeaLevel:
-    """Record the sea-level of a specific station at a specific date.
-
-    Instance Variable:
-        - date: The date at when the sea-level is recorded.
-        - height: The recorded height of sea-level.
-
-    Representation Invariance:
-        - height > 0
+    Representation Invariants:
+        - all(name == self._stations[name].name for name in self._stations)
     """
-    date: datetime.date
-    height: int
+    # Private Instance Attributes:
+    #   - _temperatures: a mapping from the date when a measure of the global
+    #       temperature is made to the measurement.
+    #       This represents all the temperatures in the system.
+    #   - _sea_levels: a mapping from the date when a measure of the sea_level
+    #       of a certain station is made to SeaLevel object.
+    #       This represents all the sea-levels in the system.
+    #   - _stations: a mapping from station name to Station object.
+    #       This represents all the stations in the system.
 
-    def __init__(self, lst: List[int]):
-        """Initialize a SeaLevel object"""
-        if lst[3] < 0:
-            return
-        self.date = datetime.date(lst[0], lst[1], lst[2])
-        self.height = lst[3]
+    _temperatures: Dict[datetime.date, Temperature]
+    _sea_levels: Dict[(datetime.date, Station), SeaLevel]
+    _stations: Dict[str, Station]
 
-    def __ge__(self, other):
-        """Greater than or equal to."""
-        return self.height >= other.height
+    def __init__(self) -> None:
+        """Initialize a new food delivery system.
+
+        The system starts with no entities.
+        """
+        self._temperatures = {}
+        self._sea_levels = {}
+        self._stations = {}
+
+    def add_temperature(self, temperature: Temperature) -> bool:
+        """Add the given temperature to this system.
+
+        Do NOT add the temperature if one with the same date already exists.
+
+        Return whether the temperature was successfully added to this system.
+        """
+        raise NotImplementedError
+
+    def add_sea_level(self, sea_level: SeaLevel) -> bool:
+        """Add the given SeaLevel to this system.
+
+        Do NOT add the sea_level if one with the same date and station already exists.
+
+        Return whether the SeaLevel was successfully added to this system.
+        """
+        identifier = (sea_level.date, sea_level.station)
+        if identifier in self._sea_levels:
+            return False
+        self._sea_levels[identifier] = sea_level
+        return True
+
+    def add_station(self, station: Station) -> bool:
+        """Add the given station to this system.
+
+        Do NOT add the station if one with the same name already exists.
+
+        Return whether the station was successfully added to this system.
+        """
+        identifier = station.name
+        if identifier in self._stations:
+            return False
+        self._stations[identifier] = station
+        return True
 
 
-class Station:
-    """Record each station and its all sea-level data.
+if __name__ == '__main__':
+    import python_ta.contracts
+    python_ta.contracts.DEBUG_CONTRACTS = False
+    python_ta.contracts.check_all_contracts()
 
-    Instance Variable:
-        - sea_level: a list containing all its sea-level data at different time.
-    """
-    sea_level: List[SeaLevel]
-    # temperature
-    # name
-    # location
+    import doctest
+    doctest.testmod(verbose=True)
 
-    def __init__(self, lst: List[List[Any]]):
-        self.sea_level = []
-        for detail in lst:
-            measure = SeaLevel(detail)
-            self.sea_level.append(measure)
-
-    def average(self) -> Dict[datetime.date, int]:
-        """Return a dictionary containing each month of each year that have valid measurements and
-         the average of all measurements during that month."""
-        average = {}
-        date = datetime.date(1000, 1, 1)
-        height = 0
-        for measure in self.sea_level:
-            year_month = datetime.date(measure.date.year, measure.date.month, 1)
-            if year_month not in average:
-                average[year_month] = [measure.height]
-            else:
-                average[year_month].append(measure.height)
-
-        for month in average:
-            mean_height = mean(average[month])
-            average[month] = mean_height
-
-        return average
-
+    # import python_ta
+    # python_ta.check_all(config={
+    #     'extra-imports': ['dataclasses', 'datetime', 'python_ta.contracts', 'math', 'entities'],
+    #     'allowed-io': ['run_example'],
+    #     'max-line-length': 100,
+    #     'disable': ['R1705', 'C0200', 'R0201']
+    # })
