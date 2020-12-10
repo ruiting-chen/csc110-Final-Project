@@ -23,30 +23,23 @@ def get_sea_level_info(link: str) -> List[List[str]]:
     return try_lst
 
 
-def get_station() -> dict:
-    """Return a dictionary storing all the station and the corresponding portion of url in a dictionary.
-    """
-    stations = {}
-    all_data = get_sea_level_info(url)
-    for lst in all_data:
-        stations[lst[2]] = f'd{lst[0]}'
-    return stations
-
-
 def process_data() -> list:
     """This function will extract sea-level data from the internet.
 
-    This function will promot the caller to type in a station that he want to check out.
+    This function will promote the caller to type in a station that he want to check out.
     Base on the station the user typed in, this function will extract the corresponding
     sea-level data from the internet.
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
-    all_station = get_station()
+    all_data = get_sea_level_info(url)
+    all_station = {}
+    for lst in all_data:
+        all_station[lst[2]] = lst[-1]
     station = input(f'Which station do you want to see? Choose from {list(all_station.keys())}')
     if station not in all_station:
         raise InvalidStationError
 
-    csv_web = f'http://uhslc.soest.hawaii.edu/data/csv/fast/daily/{all_station[station]}.csv'
+    csv_web = all_station[station]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
     read = csv.reader(lst_line)
@@ -94,6 +87,9 @@ class Station:
         - sea_level: a list containing all its sea-level data at different time.
     """
     sea_level: List[SeaLevel]
+    # temperature
+    # name
+    # location
 
     def __init__(self, lst: List[List[Any]]):
         self.sea_level = []
