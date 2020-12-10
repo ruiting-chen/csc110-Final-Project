@@ -7,6 +7,7 @@ from datapackage import Package
 from entities import Station
 from statistics import mean
 import urllib.request
+import csv
 
 
 def get_sea_level_data() -> List[List[str]]:
@@ -78,24 +79,17 @@ def process_sea_level_csv(station: Station) -> List[List[Any]]:
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
 
-    # all_data = get_sea_level_data()
-    #
-    # all_station = {}
-    # for lst in all_data:
-    #     all_station[lst[2]] = lst[-1]
-    # if station not in all_station:
-    #     raise InvalidStationError
 
     csv_web = processed_sea_level_data[station][1]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
-    read = csv_file.reader(lst_line)
+    read = csv.reader(lst_line)
 
     lst = []
     for row in read:
-        if row[3] < 0:
+        if int(row[3]) < 0:
             continue
-        date = datetime.date(row[0], row[1], row[2])
+        date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
         height = row[3]
         new_lst = [date, height]
         lst.append(new_lst)
