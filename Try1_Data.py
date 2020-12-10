@@ -2,6 +2,7 @@ from typing import Any, List
 from bs4 import BeautifulSoup
 import requests
 
+
 url = 'http://uhslc.soest.hawaii.edu/data/fd.html'
 
 
