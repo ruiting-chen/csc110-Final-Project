@@ -23,9 +23,9 @@ class Station:
     """Record each station and its all sea-level data.
 
         Instance Variable:
-            - sea_level: a list containing all its sea-level data at different time.
             - name: name of the station
             - location: location of the station, represented in (longitude, latitude)
+            - sea_level: a list containing all its sea-level data at different time.
         """
     name: str
     location: Tuple[float, float]
@@ -39,13 +39,14 @@ class SeaLevel:
         Instance Variable:
             - date: The date at when the sea-level is recorded.
             - height: The recorded height of sea-level.
+            - station: The name of the station at where the sea-level is measured
 
         Representation Invariance:
             - height > 0
         """
     date: datetime.date
-    height: int
-    station: Station
+    height: float
+    station: str
 
 
 if __name__ == '__main__':
