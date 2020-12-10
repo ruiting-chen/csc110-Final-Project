@@ -6,6 +6,7 @@ import datetime
 from datapackage import Package
 from entities import Station
 from statistics import mean
+import urllib.request
 
 
 def process_sea_level_info() -> List[List[str]]:
@@ -53,3 +54,37 @@ def average(station: Station) -> Dict[datetime.date, int]:
         average_dict[month] = mean_height
 
     return average_dict
+
+
+def process_data(station: Station) -> list:
+    """This function will extract sea-level data from the internet.
+
+    This function will promote the caller to type in a station that he want to check out.
+    Base on the station the user typed in, this function will extract the corresponding
+    sea-level data from the internet.
+
+    If the input station is not among the ones promoted, an InvalidStationError will occur."""
+
+    all_data = process_sea_level_info()
+    all_station = {}
+    for lst in all_data:
+        all_station[lst[2]] = lst[-1]
+    if station not in all_station:
+        raise InvalidStationError
+
+    csv_web = all_station[station]
+    csv_file = urllib.request.urlopen(csv_web)
+    lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
+    read = csv_file.reader(lst_line)
+
+    lst = []
+    for row in read:
+        lst.append(row)
+    return lst
+
+
+class InvalidStationError(Exception):
+    """This exception will raise if the input station is not among the ones promoted."""
+
+    def __str__(self):
+        return 'The input station is not among the ones promoted.'
