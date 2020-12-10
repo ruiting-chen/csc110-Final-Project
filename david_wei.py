@@ -64,15 +64,6 @@ class InvalidStationError(Exception):
         return 'The input station is not among the ones promoted.'
 
 
-class Station:
-    """Record each station and its all sea-level data.
-
-    Instance Variable:
-        - sea_level: a list containing all its sea-level data at different time.
-    """
-    sea_level: List[SeaLevel]
-
-
 class SeaLevel:
     """Record the sea-level of a specific station at a specific date.
 
@@ -88,4 +79,19 @@ class SeaLevel:
 
     def __init__(self, lst: List[int]):
         self.date = datetime.date(lst[0], lst[1], lst[2])
+        self.height = lst[3]
 
+
+class Station:
+    """Record each station and its all sea-level data.
+
+    Instance Variable:
+        - sea_level: a list containing all its sea-level data at different time.
+    """
+    sea_level: List[SeaLevel]
+
+    def __init__(self, lst: List[List[Any]]):
+        self.sea_level = []
+        for detail in lst:
+            measure = SeaLevel(detail)
+            self.sea_level.append(measure)
