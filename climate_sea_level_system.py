@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Dict, Optional
+from typing import Dict
 
 # This is the Python module containing the individual entity data classes.
 from entities import Temperature, Station, SeaLevel

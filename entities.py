@@ -1,21 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 import datetime
 from typing import Tuple, List
-
-
-@dataclass
-class SeaLevel:
-    """Record the sea-level of a specific station at a specific date.
-
-        Instance Variable:
-            - date: The date at when the sea-level is recorded.
-            - height: The recorded height of sea-level.
-
-        Representation Invariance:
-            - height > 0
-        """
-    date: datetime.date
-    height: int
 
 
 @dataclass
@@ -40,10 +27,26 @@ class Station:
             - name: name of the station
             - location: location of the station, represented in (longitude, latitude)
         """
-    sea_level: List[SeaLevel]
     temperature: List[Temperature]
     name: str
     location: Tuple[float, float]
+    sea_level: List[SeaLevel]
+
+
+@dataclass
+class SeaLevel:
+    """Record the sea-level of a specific station at a specific date.
+
+        Instance Variable:
+            - date: The date at when the sea-level is recorded.
+            - height: The recorded height of sea-level.
+
+        Representation Invariance:
+            - height > 0
+        """
+    date: datetime.date
+    height: int
+    station: Station
 
 
 if __name__ == '__main__':
