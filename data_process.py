@@ -78,15 +78,15 @@ def process_sea_level_csv(station: Station) -> List[List[Any]]:
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
 
-    all_data = get_sea_level_data()
+    # all_data = get_sea_level_data()
+    #
+    # all_station = {}
+    # for lst in all_data:
+    #     all_station[lst[2]] = lst[-1]
+    # if station not in all_station:
+    #     raise InvalidStationError
 
-    all_station = {}
-    for lst in all_data:
-        all_station[lst[2]] = lst[-1]
-    if station not in all_station:
-        raise InvalidStationError
-
-    csv_web = all_station[station]
+    csv_web = processed_sea_level_data[station][1]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
     read = csv_file.reader(lst_line)
