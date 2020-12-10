@@ -1,6 +1,3 @@
-
-from __future__ import annotations
-
 from dataclasses import dataclass
 import datetime
 from typing import Tuple, List
@@ -44,6 +41,8 @@ class Temperature:
 
     Instance Variables:
         - """
+
+
 if __name__ == '__main__':
     import python_ta.contracts
     python_ta.contracts.DEBUG_CONTRACTS = False
