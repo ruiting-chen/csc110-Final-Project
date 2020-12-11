@@ -49,3 +49,22 @@ class GenerateStationAndSeaLevel(EntityGenerator):
             new_station = Station(station, location, lst_sea_level)
             system.add_station(new_station)
             print(f'{station} is added. Please be patient')
+
+
+class GenerateStationAndSeaLevel_try(EntityGenerator):
+    """A class that is responsible for generating station.
+    """
+
+    def generate(self, system: ClimateSeaLevelSystem) -> None:
+        """Mutate system by generating stations.
+        """
+        station_list = processed_sea_level_data.keys()
+        for station in station_list:
+            if len(system.get_station()) >= 50:
+                break
+            location = processed_sea_level_data[station][0]
+            sea_level = process_single_sea_level(station)
+            new_station = Station(station, location, sea_level)
+            system.add_station(new_station)
+            print(f'{station} is added. Please be patient')
+            print(f'{100 - len(system.get_station())} is left')

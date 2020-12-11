@@ -29,7 +29,7 @@ class Station:
         """
     name: str
     location: Tuple[float, float]
-    sea_level: List[SeaLevel]
+    sea_level: dict
 
 
 @dataclass

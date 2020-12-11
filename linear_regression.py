@@ -3,13 +3,13 @@ import plotly.graph_objects as go
 import datetime
 from entities import Station, SeaLevel, Temperature
 from typing import List, Callable
-from generates import GenerateStationAndSeaLevel, GenerateTemperature
+from generates import GenerateStationAndSeaLevel, GenerateTemperature, GenerateStationAndSeaLevel_try
 from climate_sea_level_system import ClimateSeaLevelSystem
 import data_process
 
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
-generate_station = GenerateStationAndSeaLevel()
+generate_station = GenerateStationAndSeaLevel_try()
 
 
 def generate_tempera():
@@ -30,6 +30,25 @@ def get_compare(station=None) -> list:
             new_lst.append((interval, lst_temp[month].temperature))
     else:
         dic = data_process.new_average(station)
+        new_lst = []
+        base_month = min(dic.keys())
+        for month in dic:
+            interval = (month - base_month).days
+            new_lst.append((interval, dic[month]))
+
+    return new_lst
+
+
+def get_compare_try(station=None) -> list:
+    if station is None:
+        new_lst = []
+        lst_temp = system.get_temp()
+        base_month = system.find_average_temp()
+        for month in lst_temp:
+            interval = (month - base_month).days
+            new_lst.append((interval, lst_temp[month].temperature))
+    else:
+        dic = station.sea_level
         new_lst = []
         base_month = min(dic.keys())
         for month in dic:
@@ -225,7 +244,7 @@ def run_example_sea(station: str) -> tuple:
     """
     generate_tempera()
     generate_sea()
-    points = get_compare(system.get_station()[station])
+    points = get_compare_try(system.get_station()[station])
     separated_coordinates = convert_points(points)
     x_coords = separated_coordinates[0]
     x_max = max(x_coords)
