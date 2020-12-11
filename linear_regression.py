@@ -102,7 +102,7 @@ def simple_linear_regression(points: list) -> tuple:
     return (a, b)
 
 
-def calculate_r_squared(points: list, a: float, b: float) -> float:
+def calculate_r_squared(converted_version: tuple, a: float, b: float) -> float:
     """Return the R squared value when the given points are modelled as the line y = a + bx.
 
     points is a list of pairs of numbers: [(x_1, y_1), (x_2, y_2), ...]
@@ -113,11 +113,12 @@ def calculate_r_squared(points: list, a: float, b: float) -> float:
 
     Further reading: https://en.wikipedia.org/wiki/Coefficient_of_determination
     """
-    converted_version = convert_points(points)
     average_y = find_average(converted_version[1])
-    total_sum_of_squares = sum([(x[1] - average_y) ** 2 for x in points])
-    residual_sum_of_squares = sum([(x[1] - (a + b * x[0])) ** 2 for x in points])
-    return 1 - residual_sum_of_squares / total_sum_of_squares
+    total_sum_of_squares = sum([(converted_version[1][i] - average_y) ** 2 for i in range(len(converted_version[0]))])
+    residual_sum_of_squares = sum([(converted_version[1][i] - (a + b * converted_version[0][i])) ** 2
+                                   for i in range(len(converted_version[0]))])
+    r = 1 - residual_sum_of_squares / total_sum_of_squares
+    return float(str(r)[:5])
 
 
 def find_average(points: list) -> float:
@@ -149,7 +150,8 @@ def run_example_temp() -> tuple:
     x_coords = separated_coordinates[0]
     x_min = min(x_coords)
     x_max = max(x_coords)
-    y_max = max(convert_points(points)[0])
+    num_tup = convert_points(points)
+    y_max = max(num_tup[0])
     y_coords = separated_coordinates[1]
 
     # Do a simple linear regression. Returns the (a, b) constants for
@@ -159,7 +161,7 @@ def run_example_temp() -> tuple:
     b = model[1]
 
     # Plot all the data points AND a line based on the regression
-    return (x_coords, y_coords, a, b, x_min, x_max, y_max)
+    return (x_coords, y_coords, a, b, x_min, x_max, y_max, num_tup)
 
 
 def run_example_sea(station: str) -> tuple:
@@ -180,7 +182,8 @@ def run_example_sea(station: str) -> tuple:
     x_coords = separated_coordinates[0]
     x_min = min(x_coords)
     x_max = max(x_coords)
-    y_max = max(convert_points(points)[0])
+    num_tup = convert_points(points)
+    y_max = max(num_tup[0])
     y_coords = separated_coordinates[1]
 
     # Do a simple linear regression. Returns the (a, b) constants for
@@ -190,7 +193,7 @@ def run_example_sea(station: str) -> tuple:
     b = model[1]
 
     # Plot all the data points AND a line based on the regression
-    return (x_coords, y_coords, a, b, x_min, x_max, y_max)
+    return (x_coords, y_coords, a, b, x_min, x_max, y_max, num_tup)
 
 
 def plot(tmp: tuple, sea: tuple, station: str) -> None:
@@ -215,14 +218,16 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
     fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', name='Sea Level Data'), secondary_y=True)
 
     # Add the regression line
+    r = calculate_r_squared(tmp[-1],tmp[2], tmp[3])
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
                                                     evaluate_line(tmp[2], tmp[3], tmp[6])],
-                             mode='lines', name='Temperature Anomalies Regression line'), secondary_y=False)
+                             mode='lines', name=f'Temperature Anomalies Regression line R^2 = {r}'), secondary_y=False)
 
     # Add the regression line
+    r = calculate_r_squared(sea[-1], sea[2], sea[3])
     fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
                                                 evaluate_line(sea[2], sea[3], sea[6])],
-                             mode='lines', name='Sea Level Regression line'), secondary_y=True)
+                             mode='lines', name=f'Sea Level Regression line R^2 = {r}'), secondary_y=True)
 
     fig.update_layout(
         title_text=f'Station {station} Sea Level And Temperature Data'
