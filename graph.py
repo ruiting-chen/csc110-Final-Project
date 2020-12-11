@@ -7,6 +7,7 @@ from generates import GenerateStationAndSeaLevel
 import datetime
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
+from linear_regression import go_plot
 
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
@@ -48,14 +49,18 @@ for station in system.get_station():
 
 
 fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color},
-                              hovertemplate='call the see_detail function and pass in the name of this station to see detail',
+                              hovertemplate='call the see_detail function and pass in "Wellington" to see detail',
                               showlegend=False))
 fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
-# fig.update_geos(showland=True, landcolor='Green',
-#                 showocean=True, oceancolor='DarkBlue',
-#                 showrivers=True, rivercolor='DarkBlue',
-#                 showlakes=True, lakecolor='DarkBlue',
-#                showcountries=True, countrycolor='White')
+fig.update_geos(showland=True, landcolor='Green',
+                showocean=True, oceancolor='LightBlue',
+                showrivers=True, rivercolor='DarkBlue',
+                showlakes=True, lakecolor='DarkBlue',
+               showcountries=True, countrycolor='White')
 fig.update_geos(lataxis_showgrid=True, lonaxis_showgrid=True)
 # fig.update_layout(height=1000)
 fig.show()
+
+
+def see_detail(station: str):
+    go_plot(station)
