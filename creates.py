@@ -1,6 +1,5 @@
 """TODO: Write docstring
 """
-import data_process
 from entities import Station, Temperature, SeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
 import datetime
