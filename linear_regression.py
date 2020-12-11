@@ -201,19 +201,17 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
 
     Note: this function calls your evaluate_line function, so make sure that you've
     tested your evaluate_line function carefully before try to call this one.
-
-    We've provided this function for you, and you should not modify it!
     """
     # Create a blank figure
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Add the raw data
-    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', name='Temperature Data'),
-    secondary_y = False)
+    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', marker={'color': 'blue'}, name='Temperature Data'),
+                  secondary_y=False)
 
     # Add the regression line
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
-                                              evaluate_line(tmp[2], tmp[3], tmp[6])],
+                                                    evaluate_line(tmp[2], tmp[3], tmp[6])],
                              mode='lines', name='Temperature Regression line'), secondary_y=False)
 
     # Add the raw data
@@ -221,7 +219,7 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
 
     # Add the regression line
     fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
-                                                evaluate_line(sea[2], sea[3], sea[6])],
+                                                    evaluate_line(sea[2], sea[3], sea[6])],
                              mode='lines', name='Sea Level Regression line'), secondary_y=True)
 
     fig.update_layout(

@@ -1,12 +1,12 @@
 # Some Plotly graphing code
-
+import linear_regression
 
 import plotly.graph_objects as go
 import numpy as np
 
 x = np.random.randint(-90, 90, 100)
 y = np.random.randint(-180, 180, 100)
-
+x = system.get_stations().location[]
 # print(x)
 # print(y)
 

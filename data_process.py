@@ -56,8 +56,6 @@ def process_temperature_data() -> List[List[Any]]:
     for data in temp_lst:
         data[1] = float(data[1])
 
-    temp_lst.reverse()
-
     return temp_lst
 
 
