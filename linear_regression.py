@@ -29,40 +29,40 @@ def evaluate_line(a: float, b: float, error: float, x: float) -> float:
     return a + b * x + e
 
 
-def generate_random_data(a: float, b: float, error: float, num_points: int,
-                         x_max: float) -> list:
-    """Return a list of num_points data points generated from the model y = a + bx,
-    with the given error range for each point.
-
-    You may ASSUME that:
-      - x_max > 0
-      - error >= 0
-
-    Each x-coordinate is chosen randomly from 0 to x_max (again using
-    random.uniform).
-
-    Implement this function in two steps:
-      1. First, generate a list of random x values. You can do this using an expression
-         of the form:
-
-             [ ... for _ in range(0, num_points) ]
-
-         See the handout for more help.
-      2. Use those x values to generate a list of (x, y) points, using evaluate_line.
-
-    >>> points = generate_random_data(5.0, 1.0, 0.5, 10, 100.0)
-    >>> len(points)
-    10
-    >>> first_point = points[0]
-    >>> first_x = first_point[0]
-    >>> first_y = first_point[1]
-    >>> 0.0 <= first_x <= 100.0  # x-coordinate is in the right range
-    True
-    >>> -0.5 <= first_y - 5.0 - first_x <= 0.5
-    True
-    """
-    x_values = [random.uniform(0, x_max) for _ in range(0, num_points)]
-    return [(x, evaluate_line(a, b, error, x)) for x in x_values]
+# def generate_random_data(a: float, b: float, error: float, num_points: int,
+#                          x_max: float) -> list:
+#     """Return a list of num_points data points generated from the model y = a + bx,
+#     with the given error range for each point.
+#
+#     You may ASSUME that:
+#       - x_max > 0
+#       - error >= 0
+#
+#     Each x-coordinate is chosen randomly from 0 to x_max (again using
+#     random.uniform).
+#
+#     Implement this function in two steps:
+#       1. First, generate a list of random x values. You can do this using an expression
+#          of the form:
+#
+#              [ ... for _ in range(0, num_points) ]
+#
+#          See the handout for more help.
+#       2. Use those x values to generate a list of (x, y) points, using evaluate_line.
+#
+#     >>> points = generate_random_data(5.0, 1.0, 0.5, 10, 100.0)
+#     >>> len(points)
+#     10
+#     >>> first_point = points[0]
+#     >>> first_x = first_point[0]
+#     >>> first_y = first_point[1]
+#     >>> 0.0 <= first_x <= 100.0  # x-coordinate is in the right range
+#     True
+#     >>> -0.5 <= first_y - 5.0 - first_x <= 0.5
+#     True
+#     """
+#     x_values = [random.uniform(0, x_max) for _ in range(0, num_points)]
+#     return [(x, evaluate_line(a, b, error, x)) for x in x_values]
 
 
 def convert_points(points: list) -> tuple:
