@@ -49,24 +49,24 @@ for station in system.get_station():
 
 
 
-fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color},
-                              hovertext=station_name))
-fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
-fig.update_geos(showland=True, landcolor='Green',
-                showocean=True, oceancolor='LightBlue',
-                showrivers=True, rivercolor='DarkBlue',
-                showlakes=True, lakecolor='DarkBlue',
-               showcountries=True, countrycolor='White')
-fig.update_geos(lataxis_showgrid=True, lonaxis_showgrid=True)
-# fig.update_layout(height=1000)
-fig.show()
-
-
-def see_detail(station: str):
-    go_plot(station)
-
-name = input('Please type in the station name that you want to see detailed report of. Hover over it to see name.')
-see_detail(name)
+# fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color},
+#                               hovertext=station_name))
+# fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
+# fig.update_geos(showland=True, landcolor='Green',
+#                 showocean=True, oceancolor='LightBlue',
+#                 showrivers=True, rivercolor='DarkBlue',
+#                 showlakes=True, lakecolor='DarkBlue',
+#                showcountries=True, countrycolor='White')
+# fig.update_geos(lataxis_showgrid=True, lonaxis_showgrid=True)
+# # fig.update_layout(height=1000)
+# fig.show()
+#
+#
+# def see_detail(station: str):
+#     go_plot(station)
+#
+# name = input('Please type in the station name that you want to see detailed report of. Hover over it to see name.')
+# see_detail(name)
 
 
 
@@ -86,13 +86,13 @@ fig_dict = {
     "frames": []
 }
 
-x = np.random.randint(-90, 90, 100)
-y = np.random.randint(-180, 180, 100)
+# x = np.random.randint(-90, 90, 100)
+# y = np.random.randint(-180, 180, 100)
 
 # print(x)
 # print(y)
 
-color = ['red', 'green', 'yellow', 'blue', 'black']
+# color = ['red', 'green', 'yellow', 'blue', 'black']
 
 # fig.update_layout(height=1000, margin={'r':0, 't':0, 'l':0, 'b':0})
 
@@ -116,12 +116,12 @@ sliders_dict = {
 }
 
 # make data
-fig = go.Scattergeo(lat=x, lon=y, marker={'color': color[0]})
+fig = go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color[0]}, hovertext=station_name)
 fig_dict["data"].append(fig)
 
 # make frames
 for i in range(len(dates)):
-    fig = go.Scattergeo(lat=x, lon=y, marker={'color': color[i]})
+    fig = go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color[i]}, hovertext=station_name)
     frame = {"data": fig, 'name': dates[i]}
 
     fig_dict["frames"].append(frame)
