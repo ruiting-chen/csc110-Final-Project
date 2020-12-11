@@ -3,7 +3,6 @@
 import data_process
 from data_process import processed_sea_level_data, process_single_sea_level
 from climate_sea_level_system import ClimateSeaLevelSystem
-# from creates import CreateStation, CreateTemperature, CreateSeaLevel
 from entities import Station, Temperature, SeaLevel
 
 
