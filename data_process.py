@@ -98,10 +98,6 @@ def new_average(station: Station) -> dict:
     return average_dict
 
 
-
-    return average_dict
-
-
 def process_single_sea_level(station: Station) -> List[List[Any]]:
     """This function will extract sea-level data from the internet.
 
