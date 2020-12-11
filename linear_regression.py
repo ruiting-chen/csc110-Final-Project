@@ -228,7 +228,7 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
         title_text=f'Station {station} Sea Level And Temperature Data'
     )
 
-    fig.update_xaxes(title_text="Number of Days Since Recorded")
+    fig.update_xaxes(title_text="Year")
 
     fig.update_yaxes(title_text="Temperature", secondary_y=False)
     fig.update_yaxes(title_text="Sea Level", secondary_y=True)
