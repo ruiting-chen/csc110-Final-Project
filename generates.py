@@ -37,7 +37,7 @@ class GenerateStationAndSeaLevel(EntityGenerator):
         """
         station_list = processed_sea_level_data.keys()
         for station in station_list:
-            if len(system.get_station()) >= 20:
+            if len(system.get_station()) >= 5:
                 break
             location = processed_sea_level_data[station][0]
             sea_level = process_single_sea_level(station)

@@ -47,7 +47,9 @@ for station in system.get_station():
 
 
 
-fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color}))
+fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color},
+                              hovertemplate='call the see_detail function and pass in the name of this station to see detail',
+                              showlegend=False))
 fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
 # fig.update_geos(showland=True, landcolor='Green',
 #                 showocean=True, oceancolor='DarkBlue',
