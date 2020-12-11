@@ -1,5 +1,6 @@
 import random
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
 
@@ -12,8 +13,8 @@ def generate_tempera():
     generate_temp.generate(system)
 
 
-def generate_sea():
-    generate_station.generate(system)
+def generate_sea(station: str):
+    generate_station.generate(system, station)
 
 
 def get_compare(station=None) -> list:
@@ -23,19 +24,19 @@ def get_compare(station=None) -> list:
         base_month = system.find_average_temp()
         for month in lst_temp:
             interval = (month - base_month).days
-            new_lst.append((interval, lst_temp[month].temperature))
+            new_lst.append((interval, lst_temp[month].temperature, month))
     else:
         dic = station.sea_level
         new_lst = []
         base_month = min(dic.keys())
         for month in dic:
             interval = (month - base_month).days
-            new_lst.append((interval, dic[month]))
+            new_lst.append((interval, dic[month], month))
 
     return new_lst
 
 
-def evaluate_line(a: float, b: float, error: float, x: float) -> float:
+def evaluate_line(a: float, b: float, x: float) -> float:
     """Evaluate the linear function y = a + bx for the given a, b, and x values
     with the given error term.
 
@@ -54,12 +55,11 @@ def evaluate_line(a: float, b: float, error: float, x: float) -> float:
     Because of the randomness, we can't specify an exact doctest, but we can
     write a doctest based on the range of possible values:
 
-    >>> result = evaluate_line(5.0, 1.0, 0.5, 10.0)  # y = 5.0 + 1.0 * 10.0, with error 0.5
+    >>> result = evaluate_line(5.0, 1.0, 10.0)  # y = 5.0 + 1.0 * 10.0, with error 0.5
     >>> -0.5 <= result - 15.0 <= 0.5
     True
     """
-    e = random.uniform(-error, error)
-    return a + b * x + e
+    return a + b * x
 
 
 def convert_points(points: list) -> tuple:
@@ -144,9 +144,12 @@ def run_example_temp() -> tuple:
     """
     generate_tempera()
     points = get_compare()
-    separated_coordinates = convert_points(points)
+    new_points = [(tup[2], tup[1]) for tup in points]
+    separated_coordinates = convert_points(new_points)
     x_coords = separated_coordinates[0]
+    x_min = min(x_coords)
     x_max = max(x_coords)
+    y_max = max(convert_points(points)[0])
     y_coords = separated_coordinates[1]
 
     # Do a simple linear regression. Returns the (a, b) constants for
@@ -155,16 +158,8 @@ def run_example_temp() -> tuple:
     a = model[0]
     b = model[1]
 
-    # Plot all the data points that have been randomly generated
-    plot_points(x_coords, y_coords)
-
     # Plot all the data points AND a line based on the regression
-    plot_points_and_regression(x_coords, y_coords, a, b, x_max)
-
-    # Calculate the r_squared value
-    r_squared = calculate_r_squared(points, a, b)
-    # r_squared = 0  # This is a dummy value to use until you complete calculate_r_squared
-    return (a, b, r_squared)
+    return (x_coords, y_coords, a, b, x_min, x_max, y_max)
 
 
 def run_example_sea(station: str) -> tuple:
@@ -178,12 +173,14 @@ def run_example_sea(station: str) -> tuple:
       5. Calculates the R squared value for the regression model with this data.
       6. Returns the linear regression model and the R squared value.
     """
-    generate_tempera()
-    generate_sea()
+    generate_sea(station)
     points = get_compare(system.get_station()[station])
-    separated_coordinates = convert_points(points)
+    new_points = [(tup[2], tup[1]) for tup in points]
+    separated_coordinates = convert_points(new_points)
     x_coords = separated_coordinates[0]
+    x_min = min(x_coords)
     x_max = max(x_coords)
+    y_max = max(convert_points(points)[0])
     y_coords = separated_coordinates[1]
 
     # Do a simple linear regression. Returns the (a, b) constants for
@@ -192,39 +189,11 @@ def run_example_sea(station: str) -> tuple:
     a = model[0]
     b = model[1]
 
-    # Plot all the data points that have been randomly generated
-    plot_points(x_coords, y_coords)
-
     # Plot all the data points AND a line based on the regression
-    plot_points_and_regression(x_coords, y_coords, a, b, x_max)
-
-    # Calculate the r_squared value
-    r_squared = calculate_r_squared(points, a, b)
-    # r_squared = 0  # This is a dummy value to use until you complete calculate_r_squared
-    return (a, b, r_squared)
+    return (x_coords, y_coords, a, b, x_min, x_max, y_max)
 
 
-def plot_points(x_coords: list, y_coords: list) -> None:
-    """Plot the given x- and y-coordinates using plotly. Display results in a web browser.
-
-    x_coords is a list of floats representing the x-coordinates of the points,
-    and y_coords is a list of float representing the y-coordinates of the points.
-    These two lists must have the same length.
-
-    We've provided this function for you, and you should not modify it!
-    """
-    # Create a blank figure
-    fig = go.Figure()
-
-    # Add the raw data
-    fig.add_trace(go.Scatter(x=x_coords, y=y_coords, mode='markers', name='Data'))
-
-    # Display the figure in a web browser.
-    fig.show()
-
-
-def plot_points_and_regression(x_coords: list, y_coords: list,
-                               a: float, b: float, x_max: float) -> None:
+def plot(tmp: tuple, sea: tuple, station: str) -> None:
     """Plot the given x- and y-coordinates and linear regression model using plotly.
 
     The linear regression model is the line y = a + bx.
@@ -236,15 +205,39 @@ def plot_points_and_regression(x_coords: list, y_coords: list,
     We've provided this function for you, and you should not modify it!
     """
     # Create a blank figure
-    fig = go.Figure()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Add the raw data
-    fig.add_trace(go.Scatter(x=x_coords, y=y_coords, mode='markers', name='Data'))
+    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', name='Temperature Data'),
+    secondary_y = False)
 
     # Add the regression line
-    fig.add_trace(go.Scatter(x=[0, x_max], y=[evaluate_line(a, b, 0, 0),
-                                              evaluate_line(a, b, 0, x_max)],
-                             mode='lines', name='Regression line'))
+    fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
+                                              evaluate_line(tmp[2], tmp[3], tmp[6])],
+                             mode='lines', name='Temperature Regression line'), secondary_y=False)
+
+    # Add the raw data
+    fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', name='Sea Level Data'), secondary_y=True)
+
+    # Add the regression line
+    fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
+                                                evaluate_line(sea[2], sea[3], sea[6])],
+                             mode='lines', name='Sea Level Regression line'), secondary_y=True)
+
+    fig.update_layout(
+        title_text=f'Station {station} Sea Level And Temperature Data'
+    )
+
+    fig.update_xaxes(title_text="Number of Days Since Recorded")
+
+    fig.update_yaxes(title_text="Temperature", secondary_y=False)
+    fig.update_yaxes(title_text="Sea Level", secondary_y=True)
 
     # Display the figure in a web browser
     fig.show()
+
+
+def go_plot(station: str) -> None:
+    temp_tup = run_example_temp()
+    sea_tup = run_example_sea(station)
+    plot(temp_tup, sea_tup, station)
