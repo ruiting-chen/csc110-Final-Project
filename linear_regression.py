@@ -1,15 +1,11 @@
 import random
 import plotly.graph_objects as go
-import datetime
-from entities import Station, SeaLevel, Temperature
-from typing import List, Callable
-from generates import GenerateStationAndSeaLevel, GenerateTemperature, GenerateStationAndSeaLevel_try
+from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
-import data_process
 
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
-generate_station = GenerateStationAndSeaLevel_try()
+generate_station = GenerateStationAndSeaLevel()
 
 
 def generate_tempera():
@@ -21,25 +17,6 @@ def generate_sea():
 
 
 def get_compare(station=None) -> list:
-    if station is None:
-        new_lst = []
-        lst_temp = system.get_temp()
-        base_month = system.find_average_temp()
-        for month in lst_temp:
-            interval = (month - base_month).days
-            new_lst.append((interval, lst_temp[month].temperature))
-    else:
-        dic = data_process.new_average(station)
-        new_lst = []
-        base_month = min(dic.keys())
-        for month in dic:
-            interval = (month - base_month).days
-            new_lst.append((interval, dic[month]))
-
-    return new_lst
-
-
-def get_compare_try(station=None) -> list:
     if station is None:
         new_lst = []
         lst_temp = system.get_temp()
@@ -83,42 +60,6 @@ def evaluate_line(a: float, b: float, error: float, x: float) -> float:
     """
     e = random.uniform(-error, error)
     return a + b * x + e
-#
-#
-# # def generate_random_data(a: float, b: float, error: float, num_points: int,
-# #                          x_max: float) -> list:
-# #     """Return a list of num_points data points generated from the model y = a + bx,
-# #     with the given error range for each point.
-# #
-# #     You may ASSUME that:
-# #       - x_max > 0
-# #       - error >= 0
-# #
-# #     Each x-coordinate is chosen randomly from 0 to x_max (again using
-# #     random.uniform).
-# #
-# #     Implement this function in two steps:
-# #       1. First, generate a list of random x values. You can do this using an expression
-# #          of the form:
-# #
-# #              [ ... for _ in range(0, num_points) ]
-# #
-# #          See the handout for more help.
-# #       2. Use those x values to generate a list of (x, y) points, using evaluate_line.
-# #
-# #     >>> points = generate_random_data(5.0, 1.0, 0.5, 10, 100.0)
-# #     >>> len(points)
-# #     10
-# #     >>> first_point = points[0]
-# #     >>> first_x = first_point[0]
-# #     >>> first_y = first_point[1]
-# #     >>> 0.0 <= first_x <= 100.0  # x-coordinate is in the right range
-# #     True
-# #     >>> -0.5 <= first_y - 5.0 - first_x <= 0.5
-# #     True
-# #     """
-# #     x_values = [random.uniform(0, x_max) for _ in range(0, num_points)]
-# #     return [(x, evaluate_line(a, b, error, x)) for x in x_values]
 
 
 def convert_points(points: list) -> tuple:
@@ -188,11 +129,6 @@ def find_average(points: list) -> float:
     6.5
     """
     return sum(points) / len(points)
-#
-#
-# ###############################################################################
-# # Helper functions for using plotly (don't change these!)
-# ###############################################################################
 
 
 def run_example_temp() -> tuple:
@@ -244,7 +180,7 @@ def run_example_sea(station: str) -> tuple:
     """
     generate_tempera()
     generate_sea()
-    points = get_compare_try(system.get_station()[station])
+    points = get_compare(system.get_station()[station])
     separated_coordinates = convert_points(points)
     x_coords = separated_coordinates[0]
     x_max = max(x_coords)
@@ -312,4 +248,3 @@ def plot_points_and_regression(x_coords: list, y_coords: list,
 
     # Display the figure in a web browser
     fig.show()
-
