@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict
+from typing import Dict, Tuple
 
 # This is the Python module containing the individual entity data classes.
 from entities import Temperature, Station, SeaLevel
@@ -22,7 +22,7 @@ class ClimateSeaLevelSystem:
     #       This represents all the stations in the system.
 
     _temperatures: Dict[datetime.date, Temperature]
-    _sea_levels: Dict[(datetime.date, Station), SeaLevel]
+    _sea_levels: Dict[Tuple[datetime.date, Station], SeaLevel]
     _stations: Dict[str, Station]
 
     def __init__(self) -> None:
@@ -33,6 +33,12 @@ class ClimateSeaLevelSystem:
         self._temperatures = {}
         self._sea_levels = {}
         self._stations = {}
+
+    def get_temp(self):
+        return self._temperatures
+
+    def get_station(self):
+        return self._stations
 
     def add_temperature(self, temperature: Temperature) -> bool:
         """Add the given temperature to this system.

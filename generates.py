@@ -25,6 +25,7 @@ class GenerateTemperature(EntityGenerator):
         for temp in lst_temp:
             new_temp = Temperature(temp[0], temp[1])
             system.add_temperature(new_temp)
+            print("temp")
 
 
 class GenerateStationAndSeaLevel(EntityGenerator):
@@ -36,12 +37,15 @@ class GenerateStationAndSeaLevel(EntityGenerator):
         """
         station_list = processed_sea_level_data.keys()
         for station in station_list:
+            if len(system.get_station()) >= 20:
+                break
             location = processed_sea_level_data[station][0]
             sea_level = process_single_sea_level(station)
             lst_sea_level = []
             for detail in sea_level:
-                sea_level_obj = SeaLevel(detail[0], detail[1])
+                sea_level_obj = SeaLevel(detail[0], detail[1], station)
                 system.add_sea_level(sea_level_obj)
                 lst_sea_level.append(sea_level_obj)
             new_station = Station(station, location, lst_sea_level)
             system.add_station(new_station)
+            print("level")

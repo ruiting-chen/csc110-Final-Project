@@ -1,5 +1,33 @@
 import random
 import plotly.graph_objects as go
+import datetime
+from entities import Station, SeaLevel, Temperature
+from typing import List
+from generates import GenerateStationAndSeaLevel, GenerateTemperature
+from climate_sea_level_system import ClimateSeaLevelSystem
+import data_process
+
+system = ClimateSeaLevelSystem()
+generate_temp = GenerateTemperature()
+generate_station = GenerateStationAndSeaLevel()
+base_date = datetime.date(2000, 1, 1)
+
+def run_generate():
+    generate_temp.generate(system)
+    generate_station.generate(system)
+
+
+
+def get_compare(station: Station) -> list:
+    dic = data_process.new_average(station)
+    new_lst = []
+    for month in dic:
+        if month in system.get_temp():
+            interval = (month - base_date).days
+            new_lst.append((interval, dic[month]))
+            # , system.get_temp()[month].temperature))
+
+    return new_lst
 
 
 def evaluate_line(a: float, b: float, error: float, x: float) -> float:
@@ -27,44 +55,44 @@ def evaluate_line(a: float, b: float, error: float, x: float) -> float:
     """
     e = random.uniform(-error, error)
     return a + b * x + e
-
-
-# def generate_random_data(a: float, b: float, error: float, num_points: int,
-#                          x_max: float) -> list:
-#     """Return a list of num_points data points generated from the model y = a + bx,
-#     with the given error range for each point.
 #
-#     You may ASSUME that:
-#       - x_max > 0
-#       - error >= 0
 #
-#     Each x-coordinate is chosen randomly from 0 to x_max (again using
-#     random.uniform).
+# # def generate_random_data(a: float, b: float, error: float, num_points: int,
+# #                          x_max: float) -> list:
+# #     """Return a list of num_points data points generated from the model y = a + bx,
+# #     with the given error range for each point.
+# #
+# #     You may ASSUME that:
+# #       - x_max > 0
+# #       - error >= 0
+# #
+# #     Each x-coordinate is chosen randomly from 0 to x_max (again using
+# #     random.uniform).
+# #
+# #     Implement this function in two steps:
+# #       1. First, generate a list of random x values. You can do this using an expression
+# #          of the form:
+# #
+# #              [ ... for _ in range(0, num_points) ]
+# #
+# #          See the handout for more help.
+# #       2. Use those x values to generate a list of (x, y) points, using evaluate_line.
+# #
+# #     >>> points = generate_random_data(5.0, 1.0, 0.5, 10, 100.0)
+# #     >>> len(points)
+# #     10
+# #     >>> first_point = points[0]
+# #     >>> first_x = first_point[0]
+# #     >>> first_y = first_point[1]
+# #     >>> 0.0 <= first_x <= 100.0  # x-coordinate is in the right range
+# #     True
+# #     >>> -0.5 <= first_y - 5.0 - first_x <= 0.5
+# #     True
+# #     """
+# #     x_values = [random.uniform(0, x_max) for _ in range(0, num_points)]
+# #     return [(x, evaluate_line(a, b, error, x)) for x in x_values]
 #
-#     Implement this function in two steps:
-#       1. First, generate a list of random x values. You can do this using an expression
-#          of the form:
 #
-#              [ ... for _ in range(0, num_points) ]
-#
-#          See the handout for more help.
-#       2. Use those x values to generate a list of (x, y) points, using evaluate_line.
-#
-#     >>> points = generate_random_data(5.0, 1.0, 0.5, 10, 100.0)
-#     >>> len(points)
-#     10
-#     >>> first_point = points[0]
-#     >>> first_x = first_point[0]
-#     >>> first_y = first_point[1]
-#     >>> 0.0 <= first_x <= 100.0  # x-coordinate is in the right range
-#     True
-#     >>> -0.5 <= first_y - 5.0 - first_x <= 0.5
-#     True
-#     """
-#     x_values = [random.uniform(0, x_max) for _ in range(0, num_points)]
-#     return [(x, evaluate_line(a, b, error, x)) for x in x_values]
-
-
 def convert_points(points: list) -> tuple:
     """Return a tuple of two lists, containing the x- and y-coordinates of the given points.
 
@@ -80,8 +108,8 @@ def convert_points(points: list) -> tuple:
     list_of_x = [x[0] for x in points]
     list_of_y = [x[1] for x in points]
     return (list_of_x, list_of_y)
-
-
+#
+#
 def simple_linear_regression(points: list) -> tuple:
     """Perform a linear regression on the given points.
 
@@ -138,13 +166,13 @@ def find_average(points: list) -> float:
     6.5
     """
     return sum(points) / len(points)
-
-
-###############################################################################
-# Helper functions for using plotly (don't change these!)
-###############################################################################
-
-
+#
+#
+# ###############################################################################
+# # Helper functions for using plotly (don't change these!)
+# ###############################################################################
+#
+#
 def run_example() -> tuple:
     """Run an example use of the functions in this file.
 
@@ -156,7 +184,8 @@ def run_example() -> tuple:
       5. Calculates the R squared value for the regression model with this data.
       6. Returns the linear regression model and the R squared value.
     """
-    points = generate_random_data(10.0, 0.5, 15.0, 100, 100.0)
+    run_generate()
+    points = get_compare(system.get_station()['Pohnpei'])
     separated_coordinates = convert_points(points)
     x_coords = separated_coordinates[0]
     y_coords = separated_coordinates[1]
@@ -171,7 +200,7 @@ def run_example() -> tuple:
     plot_points(x_coords, y_coords)
 
     # Plot all the data points AND a line based on the regression
-    plot_points_and_regression(x_coords, y_coords, a, b, 100)
+    plot_points_and_regression(x_coords, y_coords, a, b, 6500)
 
     # Calculate the r_squared value
     r_squared = calculate_r_squared(points, a, b)
@@ -224,5 +253,3 @@ def plot_points_and_regression(x_coords: list, y_coords: list,
     # Display the figure in a web browser
     fig.show()
 
-
-run_example()

@@ -79,6 +79,28 @@ def average(lst: List[List[Any]]) -> List[List[Any]]:
     average_dict_keys.sort()
     return [[date, average_dict[date]] for date in average_dict_keys]
 
+# 不要改
+def new_average(station: Station) -> dict:
+    """Return a dictionary containing each month of each year that have valid measurements and
+             the average of all measurements during that month."""
+    average_dict = {}
+    for sea_level in station.sea_level:
+        year_month = datetime.date(sea_level.date.year, sea_level.date.month, 6)
+        if year_month not in average_dict:
+            average_dict[year_month] = [sea_level.height]
+        else:
+            average_dict[year_month].append(sea_level.height)
+
+    for month in average_dict:
+        lst = average_dict[month]
+        average_height = mean(lst)
+        average_dict[month] = average_height
+    return average_dict
+
+
+
+    return average_dict
+
 
 def process_single_sea_level(station: Station) -> List[List[Any]]:
     """This function will extract sea-level data from the internet.

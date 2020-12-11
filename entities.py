@@ -46,7 +46,7 @@ class SeaLevel:
         """
     date: datetime.date
     height: float
-    # station: str
+    station: str
 
 
 if __name__ == '__main__':
