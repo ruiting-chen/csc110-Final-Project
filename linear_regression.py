@@ -208,13 +208,13 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Add the raw data
-    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', name='Temperature Data'),
+    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', name='Temperature Anomalies Data'),
     secondary_y = False)
 
     # Add the regression line
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
                                               evaluate_line(tmp[2], tmp[3], tmp[6])],
-                             mode='lines', name='Temperature Regression line'), secondary_y=False)
+                             mode='lines', name='Temperature Anomalies Regression line'), secondary_y=False)
 
     # Add the raw data
     fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', name='Sea Level Data'), secondary_y=True)
@@ -230,7 +230,7 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
 
     fig.update_xaxes(title_text="Year")
 
-    fig.update_yaxes(title_text="Temperature", secondary_y=False)
+    fig.update_yaxes(title_text="Temperature Anomalies", secondary_y=False)
     fig.update_yaxes(title_text="Sea Level", secondary_y=True)
 
     # Display the figure in a web browser
