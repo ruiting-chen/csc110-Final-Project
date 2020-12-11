@@ -209,24 +209,26 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Add the raw data
-    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', marker={'color': 'blue'}, name='Temperature Data'),
+    fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', marker={'color': 'yellow'}, name='Temperature Data'),
                   secondary_y=False)
 
     # Add the raw data
-    fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', marker={'color': 'blue'}, name='Sea Level Data'),
+    fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', marker={'color': 'green'}, name='Sea Level Data'),
                   secondary_y=True)
 
     # Add the regression line
     r = calculate_r_squared(tmp[-1],tmp[2], tmp[3])
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
                                                     evaluate_line(tmp[2], tmp[3], tmp[6])],
-                             mode='lines', name=f'Temperature Anomalies Regression line R^2 = {r}'), secondary_y=False)
+                             mode='lines', marker={'color': 'red'},
+                             name=f'Temperature Anomalies Regression line R^2 = {r}'), secondary_y=False)
 
     # Add the regression line
     r = calculate_r_squared(sea[-1], sea[2], sea[3])
     fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
                                                 evaluate_line(sea[2], sea[3], sea[6])],
-                             mode='lines', name=f'Sea Level Regression line R^2 = {r}'), secondary_y=True)
+                             mode='lines', marker={'color': 'DarkBlue'},
+                             name=f'Sea Level Regression line R^2 = {r}'), secondary_y=True)
 
     fig.update_layout(
         title_text=f'Station {station} Sea Level And Temperature Data'
