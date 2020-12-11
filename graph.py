@@ -141,13 +141,14 @@ sliders_dict = {
 }
 
 # make data
-fig = go.Scattergeo(lat=x[0:5], lon=y[0:5], mode='markers', marker={'color': colouur[0]})
+fig = go.Scattergeo(lat=x[0:5], lon=y[0:5], mode='markers', marker={'color': colouur[0]}, hovertext=station_name)
 
 fig_dict["data"].append(fig)
 
 # make frames
 for i in range(len(dates)):
-    fig = go.Scattergeo(lat=x[5 * i: 5 * i + 5], lon=y[5 * i: 5 * i + 5], mode='markers', marker={'color': colouur[i]})
+    fig = go.Scattergeo(lat=x[5 * i: 5 * i + 5], lon=y[5 * i: 5 * i + 5], mode='markers', marker={'color': colouur[i]},
+    hovertext=station_name)
     frame = {"data": fig, 'name': dates[i]}
 
     fig_dict["frames"].append(frame)
