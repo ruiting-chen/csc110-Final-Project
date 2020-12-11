@@ -40,6 +40,9 @@ class ClimateSeaLevelSystem:
     def get_station(self):
         return self._stations
 
+    def find_average_temp(self) -> datetime.date:
+        return min(self._temperatures.keys())
+
     def add_temperature(self, temperature: Temperature) -> bool:
         """Add the given temperature to this system.
 

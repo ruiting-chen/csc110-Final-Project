@@ -2,7 +2,7 @@ import random
 import plotly.graph_objects as go
 import datetime
 from entities import Station, SeaLevel, Temperature
-from typing import List
+from typing import List, Callable
 from generates import GenerateStationAndSeaLevel, GenerateTemperature
 from climate_sea_level_system import ClimateSeaLevelSystem
 import data_process
@@ -10,22 +10,31 @@ import data_process
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
-base_date = datetime.date(2000, 1, 1)
 
-def run_generate():
+
+def generate_tempera():
     generate_temp.generate(system)
+
+
+def generate_sea():
     generate_station.generate(system)
 
 
-
-def get_compare(station: Station) -> list:
-    dic = data_process.new_average(station)
-    new_lst = []
-    for month in dic:
-        if month in system.get_temp():
-            interval = (month - base_date).days
+def get_compare(station=None) -> list:
+    if station is None:
+        new_lst = []
+        lst_temp = system.get_temp()
+        base_month = system.find_average_temp()
+        for month in lst_temp:
+            interval = (month - base_month).days
+            new_lst.append((interval, lst_temp[month].temperature))
+    else:
+        dic = data_process.new_average(station)
+        new_lst = []
+        base_month = min(dic.keys())
+        for month in dic:
+            interval = (month - base_month).days
             new_lst.append((interval, dic[month]))
-            # , system.get_temp()[month].temperature))
 
     return new_lst
 
@@ -91,25 +100,19 @@ def evaluate_line(a: float, b: float, error: float, x: float) -> float:
 # #     """
 # #     x_values = [random.uniform(0, x_max) for _ in range(0, num_points)]
 # #     return [(x, evaluate_line(a, b, error, x)) for x in x_values]
-#
-#
+
+
 def convert_points(points: list) -> tuple:
     """Return a tuple of two lists, containing the x- and y-coordinates of the given points.
 
-    You may ASSUME that:
+    Precondition:
         - points is a list of tuples, where each tuple is a list of floats.
-
-    >>> result = convert_points([(0.0, 1.1), (2.2, 3.3), (4.4, 5.5)])
-    >>> result[0]  # The x-coordinates
-    [0.0, 2.2, 4.4]
-    >>> result[1]  # The y-coordinates
-    [1.1, 3.3, 5.5]
     """
     list_of_x = [x[0] for x in points]
     list_of_y = [x[1] for x in points]
     return (list_of_x, list_of_y)
-#
-#
+
+
 def simple_linear_regression(points: list) -> tuple:
     """Perform a linear regression on the given points.
 
@@ -171,9 +174,9 @@ def find_average(points: list) -> float:
 # ###############################################################################
 # # Helper functions for using plotly (don't change these!)
 # ###############################################################################
-#
-#
-def run_example() -> tuple:
+
+
+def run_example_temp() -> tuple:
     """Run an example use of the functions in this file.
 
     Follow these example steps :
@@ -184,10 +187,11 @@ def run_example() -> tuple:
       5. Calculates the R squared value for the regression model with this data.
       6. Returns the linear regression model and the R squared value.
     """
-    run_generate()
-    points = get_compare(system.get_station()['Pohnpei'])
+    generate_tempera()
+    points = get_compare()
     separated_coordinates = convert_points(points)
     x_coords = separated_coordinates[0]
+    x_max = max(x_coords)
     y_coords = separated_coordinates[1]
 
     # Do a simple linear regression. Returns the (a, b) constants for
@@ -200,7 +204,44 @@ def run_example() -> tuple:
     plot_points(x_coords, y_coords)
 
     # Plot all the data points AND a line based on the regression
-    plot_points_and_regression(x_coords, y_coords, a, b, 6500)
+    plot_points_and_regression(x_coords, y_coords, a, b, x_max)
+
+    # Calculate the r_squared value
+    r_squared = calculate_r_squared(points, a, b)
+    # r_squared = 0  # This is a dummy value to use until you complete calculate_r_squared
+    return (a, b, r_squared)
+
+
+def run_example_sea(station: str) -> tuple:
+    """Run an example use of the functions in this file.
+
+    Follow these example steps :
+      1. Generates some random data points.
+      2. Converts the points into the format expected by plotly.
+      3. Performs a simple linear regression on the points.
+      4. Plots the points and the line based on the regression using plotly.
+      5. Calculates the R squared value for the regression model with this data.
+      6. Returns the linear regression model and the R squared value.
+    """
+    generate_tempera()
+    generate_sea()
+    points = get_compare(system.get_station()[station])
+    separated_coordinates = convert_points(points)
+    x_coords = separated_coordinates[0]
+    x_max = max(x_coords)
+    y_coords = separated_coordinates[1]
+
+    # Do a simple linear regression. Returns the (a, b) constants for
+    # the line y = a + b * x.
+    model = simple_linear_regression(points)
+    a = model[0]
+    b = model[1]
+
+    # Plot all the data points that have been randomly generated
+    plot_points(x_coords, y_coords)
+
+    # Plot all the data points AND a line based on the regression
+    plot_points_and_regression(x_coords, y_coords, a, b, x_max)
 
     # Calculate the r_squared value
     r_squared = calculate_r_squared(points, a, b)
