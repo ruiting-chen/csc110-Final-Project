@@ -61,26 +61,7 @@ def process_temperature_data() -> List[List[Any]]:
     return temp_lst
 
 
-# def average(lst: List[List[Any]]) -> List[List[Any]]:
-#     """Return a dictionary containing each month of each year that have valid measurements and
-#              the average of all measurements during that month."""
-#     average_dict = {}
-#     for measure in lst:
-#         year_month = datetime.date(measure[0].year, measure[0].month, 6)
-#         if year_month not in average_dict:
-#             average_dict[year_month] = [measure[1]]
-#         else:
-#             average_dict[year_month].append(measure[1])
-#
-#     for month in average_dict:
-#         average_dict[month] = mean(average_dict[month])
-#
-#     average_dict_keys = list(average_dict.keys())
-#     average_dict_keys.sort()
-#     return [[date, average_dict[date]] for date in average_dict_keys]
-
-
-def average_try(lst: List[List[Any]]) -> dict:
+def average(lst: List[List[Any]]) -> dict:
     """Return a dictionary containing each month of each year that have valid measurements and
              the average of all measurements during that month."""
     average_dict = {}
@@ -94,25 +75,6 @@ def average_try(lst: List[List[Any]]) -> dict:
     for month in average_dict:
         average_dict[month] = mean(average_dict[month])
 
-    return average_dict
-
-
-# 不要改
-def new_average(station: Station) -> dict:
-    """Return a dictionary containing each month of each year that have valid measurements and
-             the average of all measurements during that month."""
-    average_dict = {}
-    for sea_level in station.sea_level:
-        year_month = datetime.date(sea_level.date.year, sea_level.date.month, 6)
-        if year_month not in average_dict:
-            average_dict[year_month] = [sea_level.height]
-        else:
-            average_dict[year_month].append(sea_level.height)
-
-    for month in average_dict:
-        lst = average_dict[month]
-        average_height = mean(lst)
-        average_dict[month] = average_height
     return average_dict
 
 
@@ -137,4 +99,4 @@ def process_single_sea_level(station: Station) -> dict:
             new_lst = [date, height]
             lst.append(new_lst)
 
-    return average_try(lst)
+    return average(lst)

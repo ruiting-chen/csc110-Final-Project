@@ -44,4 +44,4 @@ class GenerateStationAndSeaLevel(EntityGenerator):
             new_station = Station(station, location, sea_level)
             system.add_station(new_station)
             print(f'{station} is added. Please be patient')
-            print(f'{100 - len(system.get_station())} is left')
+            print(f'{50 - len(system.get_station())} is left')
