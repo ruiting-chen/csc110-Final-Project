@@ -42,8 +42,9 @@ processed_sea_level_data = process_sea_level_data()
 def process_temperature_data() -> List[List[Any]]:
     """Return a list of Global component of Climate at a Glance (GCAG) data
     extracted from the website we found.
-    The url of the website is 'http://uhslc.soest.hawaii.edu/data/fd.html'"""
+    The url of the website is https://datahub.io/core/global-temp/datapackage.json"""
     package = Package('https://datahub.io/core/global-temp/datapackage.json')
+    temp_lst = []
 
     # get monthly temperature csv data
     for resource in package.resources:
@@ -55,28 +56,31 @@ def process_temperature_data() -> List[List[Any]]:
     for data in temp_lst:
         data[1] = float(data[1])
 
+    temp_lst.reverse()
+
     return temp_lst
 
 
-def average(station: Station) -> Dict[datetime.date, int]:
+def average(lst: List[List[Any]]) -> List[List[Any]]:
     """Return a dictionary containing each month of each year that have valid measurements and
              the average of all measurements during that month."""
     average_dict = {}
-    for measure in station.sea_level:
-        year_month = datetime.date(measure.date.year, measure.date.month, 1)
-        if year_month not in average:
-            average_dict[year_month] = [measure.height]
+    for measure in lst:
+        year_month = datetime.date(measure[0].year, measure[0].month, 6)
+        if year_month not in average_dict:
+            average_dict[year_month] = [measure[1]]
         else:
-            average_dict[year_month].append(measure.height)
+            average_dict[year_month].append(measure[1])
 
     for month in average_dict:
-        mean_height = mean(average_dict[month])
-        average_dict[month] = mean_height
+        average_dict[month] = mean(average_dict[month])
 
-    return average_dict
+    average_dict_keys = list(average_dict.keys())
+    average_dict_keys.sort()
+    return [[date, average_dict[date]] for date in average_dict_keys]
 
 
-def process_sea_level_csv(station: Station) -> List[List[Any]]:
+def process_single_sea_level(station: Station) -> List[List[Any]]:
     """This function will extract sea-level data from the internet.
 
     This function will promote the caller to type in a station that he want to check out.
@@ -93,10 +97,11 @@ def process_sea_level_csv(station: Station) -> List[List[Any]]:
     for row in read:
         if int(row[3]) >= 0:
             date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
-            height = row[3]
+            height = int(row[3])
             new_lst = [date, height]
             lst.append(new_lst)
-    return lst
+
+    return average(lst)
 
 
 class InvalidStationError(Exception):

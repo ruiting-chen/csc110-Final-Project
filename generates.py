@@ -1,9 +1,10 @@
 """TODO: Write docstring"""
 
 import data_process
-from data_process import processed_sea_level_data, process_sea_level_csv
+from data_process import processed_sea_level_data, process_single_sea_level
 from climate_sea_level_system import ClimateSeaLevelSystem
-from creates import CreateStation, CreateTemperature, CreateSeaLevel
+# from creates import CreateStation, CreateTemperature, CreateSeaLevel
+from entities import Station, Temperature, SeaLevel
 
 
 class EntityGenerator:
@@ -23,8 +24,8 @@ class GenerateTemperature(EntityGenerator):
         """
         lst_temp = data_process.process_temperature_data()
         for temp in lst_temp:
-            new_temp = CreateTemperature(temp[0], temp[1])
-            new_temp.create(system)
+            new_temp = Temperature(temp[0], temp[1])
+            system.add_temperature(new_temp)
 
 
 class GenerateStationAndSeaLevel(EntityGenerator):
@@ -37,11 +38,11 @@ class GenerateStationAndSeaLevel(EntityGenerator):
         station_list = processed_sea_level_data.keys()
         for station in station_list:
             location = processed_sea_level_data[station][0]
-            lst = process_sea_level_csv(station)
+            sea_level = process_single_sea_level(station)
             lst_sea_level = []
-            for detail in lst:
-                creator = CreateSeaLevel(detail[0], detail[1], station)
-                sea_level = creator.create(system)
-                lst_sea_level.append(sea_level)
-            create_station = CreateStation(station, location, lst_sea_level)
-            create_station.create(system)
+            for detail in sea_level:
+                sea_level_obj = SeaLevel(detail[0], detail[1])
+                system.add_sea_level(sea_level_obj)
+                lst_sea_level.append(sea_level_obj)
+            new_station = Station(station, location, lst_sea_level)
+            system.add_station(new_station)
