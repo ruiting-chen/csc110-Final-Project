@@ -21,7 +21,7 @@ def get_compare(station=None) -> list:
     if station is None:
         new_lst = []
         lst_temp = system.get_temp()
-        base_month = system.find_average_temp()
+        base_month = system.find_min_temp()
         for month in lst_temp:
             interval = (month - base_month).days
             new_lst.append((interval, lst_temp[month].temperature, month))
