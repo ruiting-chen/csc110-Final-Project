@@ -1,4 +1,3 @@
-import random
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
@@ -217,7 +216,7 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
                   secondary_y=True)
 
     # Add the regression line
-    r = calculate_r_squared(tmp[-1],tmp[2], tmp[3])
+    r = calculate_r_squared(tmp[-1], tmp[2], tmp[3])
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
                                                     evaluate_line(tmp[2], tmp[3], tmp[6])],
                              mode='lines', marker={'color': 'red'},
