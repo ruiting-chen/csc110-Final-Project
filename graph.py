@@ -38,7 +38,7 @@ for station in system.get_station():
     x.append(la)
     y.append(lon)
     color.append(colour)
-    station_name.append(f'Run see_detail and pass in {station} to see detail')
+    station_name.append(f'Name of station: {station}')
 
 
 
@@ -64,3 +64,6 @@ fig.show()
 
 def see_detail(station: str):
     go_plot(station)
+
+curiosity = input('Please type in the station name that you want to see detailed report of. Hover over it to see name.')
+see_detail(curiosity)
