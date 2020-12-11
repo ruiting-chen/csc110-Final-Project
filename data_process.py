@@ -102,10 +102,3 @@ def process_single_sea_level(station: Station) -> List[List[Any]]:
             lst.append(new_lst)
 
     return average(lst)
-
-
-class InvalidStationError(Exception):
-    """This exception will raise if the input station is not among the ones promoted."""
-
-    def __str__(self):
-        return 'The input station is not among the ones promoted.'
