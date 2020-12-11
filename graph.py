@@ -1,7 +1,9 @@
 import plotly.graph_objects as go
+import plotly.express as px
 import numpy as np
 import random
 from generates import GenerateStationAndSeaLevel
+from entities import SeaLevel, Station
 
 
 import datetime
@@ -14,7 +16,6 @@ generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 base_height = 900
 
-
 def generate_tempera():
     generate_temp.generate(system)
 
@@ -22,23 +23,46 @@ def generate_tempera():
 def generate_sea():
     generate_station.generate_all(system)
 
+dates = []
 generate_sea()
 x = []
 y = []
-color = []
+colouur = []
 station_name = []
+min_mon = []
+max_mon = []
 for station in system.get_station():
-    month = list(system.get_station()[station].sea_level.keys())[0]
-    lon = system.get_station()[station].location[0]
-    la = system.get_station()[station].location[1]
-    if system.get_station()[station].sea_level[month] < base_height:
-        colour = 'blue'
-    else:
-        colour = 'red'
-    x.append(la)
-    y.append(lon)
-    color.append(colour)
-    station_name.append(f'Name of station: {station}')
+    if len(system.get_station()[station].sea_level.keys()) < 240:
+        continue
+    min_mon.append(min(system.get_station()[station].sea_level.keys()))
+    max_mon.append(max(system.get_station()[station].sea_level.keys()))
+
+max_month = min(max_mon)
+min_month = max(min_mon)
+
+for month in range((max_month - min_month).days // 30):
+    dates.append(month)
+    inner_lst = []
+    for station in system.get_station():
+        if len(system.get_station()[station].sea_level.keys()) < 120:
+            continue
+        lon = system.get_station()[station].location[0]
+        la = system.get_station()[station].location[1]
+        new_date = min_month + datetime.timedelta(month * 30)
+        day = datetime.date(new_date.year, new_date.month, 6)
+        if day not in system.get_station()[station].sea_level:
+            colour = 'yellow'
+        else:
+            if system.get_station()[station].sea_level[day] < base_height:
+                colour = 'blue'
+            else:
+                colour = 'red'
+        x.append(la)
+        y.append(lon)
+        station_name.append(f'Name of station: {station}')
+        inner_lst.append(colour)
+    colouur.append(inner_lst)
+print(colouur)
 
 
 
@@ -49,8 +73,9 @@ for station in system.get_station():
 
 
 
-# fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color},
-#                               hovertext=station_name))
+
+# fig = go.Figure(px.scatter_geo(lat=x, lon=y, color=[*colouur],
+#                             ))
 # fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
 # fig.update_geos(showland=True, landcolor='Green',
 #                 showocean=True, oceancolor='LightBlue',
@@ -77,7 +102,7 @@ for station in system.get_station():
 
 
 
-dates = ['2000', '2001', '2002', '2003', '2004']
+# dates = ['2000', '2001', '2002', '2003', '2004']
 
 # make figure
 fig_dict = {
@@ -116,12 +141,13 @@ sliders_dict = {
 }
 
 # make data
-fig = go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color[0]}, hovertext=station_name)
+fig = go.Scattergeo(lat=x[0:5], lon=y[0:5], mode='markers', marker={'color': colouur[0]})
+
 fig_dict["data"].append(fig)
 
 # make frames
 for i in range(len(dates)):
-    fig = go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color[i]}, hovertext=station_name)
+    fig = go.Scattergeo(lat=x[5 * i: 5 * i + 5], lon=y[5 * i: 5 * i + 5], mode='markers', marker={'color': colouur[i]})
     frame = {"data": fig, 'name': dates[i]}
 
     fig_dict["frames"].append(frame)
@@ -137,5 +163,5 @@ for i in range(len(dates)):
 fig_dict["layout"]["sliders"] = [sliders_dict]
 
 fig = go.Figure(fig_dict)
-
+fig = go.Figure(fig)
 fig.show()
