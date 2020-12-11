@@ -1,6 +1,3 @@
-# Some Plotly graphing code
-
-
 import plotly.graph_objects as go
 import numpy as np
 
@@ -9,14 +6,14 @@ y = np.random.randint(-180, 180, 100)
 
 # print(x)
 # print(y)
-
-fig = go.Figure(go.Scattergeo(lat=x, lon=y))
+color = ['red'] * 20 + ['yellow'] * 20 + ['blue'] * 20 + ['green'] * 20 + ['purple'] * 20
+fig = go.Figure(go.Scattergeo(lat=x, lon=y, mode='markers', marker={'color': color}))
 fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
-fig.update_geos(showland=True, landcolor='Green',
-                showocean=True, oceancolor='DarkBlue',
-                showrivers=True, rivercolor='DarkBlue',
-                showlakes=True, lakecolor='DarkBlue',
-               showcountries=True, countrycolor='White')
+# fig.update_geos(showland=True, landcolor='Green', 
+#                 showocean=True, oceancolor='DarkBlue', 
+#                 showrivers=True, rivercolor='DarkBlue',
+#                 showlakes=True, lakecolor='DarkBlue',
+#                showcountries=True, countrycolor='White')
 fig.update_geos(lataxis_showgrid=True, lonaxis_showgrid=True)
 # fig.update_layout(height=1000)
-fig.show()
+fig.show() 
