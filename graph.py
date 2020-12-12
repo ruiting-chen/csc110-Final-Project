@@ -3,14 +3,15 @@ import datetime
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
 from linear_regression import go_plot
+from entities import Station
 
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 base_height = 900
 
-# import plotly.io as pio
-# pio.renderers.default = "browser"
+import plotly.io as pio
+pio.renderers.default = "browser"
 
 def generate_tempera():
     generate_temp.generate(system)
@@ -18,6 +19,17 @@ def generate_tempera():
 
 def generate_sea():
     generate_station.generate_all(system)
+
+
+def get_color(height: float) -> str:
+    stations = system.get_station()
+    global_min_height = min(stations[x].min_height for x in stations)
+    global_max_height = max(stations[x].max_height for x in stations)
+    interval = (global_max_height - global_min_height) / 4
+    colors = ['blue', 'green', 'yellow', 'red']
+    for i in range(1, 5):
+        if height <= global_min_height + interval * i:
+            return colors[i - 1]
 
 
 def graph_data_set_up() -> tuple:
@@ -50,17 +62,16 @@ def graph_data_set_up() -> tuple:
             new_date = min_month + datetime.timedelta(month * 30)
             day = datetime.date(new_date.year, new_date.month, 6)
             if day not in system.get_station()[station].sea_level:
-                colour = 'yellow'
+                colour = 'black'
             else:
-                if system.get_station()[station].sea_level[day] < base_height:
-                    colour = 'blue'
-                else:
-                    colour = 'red'
+                colour = get_color(system.get_station()[station].sea_level[day])
+                print(colour)
             x.append(la)
             y.append(lon)
             station_name.append(f'Name of station: {station}')
             inner_lst.append(colour)
         color.append(inner_lst)
+        print(color)
     return (num_station, color, dates, x, y, station_name)
 
 

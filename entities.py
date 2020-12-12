@@ -30,6 +30,10 @@ class Station:
     name: str
     location: Tuple[float, float]
     sea_level: dict
+    min_date: datetime.date
+    max_date: datetime.date
+    min_height: float
+    max_height: float
 
 
 @dataclass
