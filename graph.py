@@ -39,11 +39,13 @@ for station in system.get_station():
 
 max_month = min(max_mon)
 min_month = max(min_mon)
+num_station = 0
 
 for month in range((max_month - min_month).days // 30):
     dates.append(month)
     inner_lst = []
     for station in system.get_station():
+        num_station += 1
         if len(system.get_station()[station].sea_level.keys()) < 120:
             continue
         lon = system.get_station()[station].location[0]
@@ -141,13 +143,16 @@ sliders_dict = {
 }
 
 # make data
-fig = go.Scattergeo(lat=x[0:5], lon=y[0:5], mode='markers', marker={'color': colouur[0]}, hovertext=station_name)
+fig = go.Scattergeo(lat=x[0:num_station], lon=y[0:num_station], mode='markers', marker={'color': colouur[0]},
+                    hovertext=station_name)
 
 fig_dict["data"].append(fig)
 
 # make frames
 for i in range(len(dates)):
-    fig = go.Scattergeo(lat=x[5 * i: 5 * i + 5], lon=y[5 * i: 5 * i + 5], mode='markers', marker={'color': colouur[i]},
+    fig = go.Scattergeo(lat=x[num_station * i: num_station * i + num_station],
+                        lon=y[num_station * i: num_station * i + num_station],
+                        mode='markers', marker={'color': colouur[i]},
     hovertext=station_name)
     frame = {"data": fig, 'name': dates[i]}
 
@@ -167,8 +172,10 @@ fig = go.Figure(fig_dict)
 fig = go.Figure(fig)
 fig.show()
 
+
 def see_detail(station: str):
     go_plot(station)
+
 
 name = input('Please type in the station name that you want to see detailed report of. Hover over it to see name.')
 see_detail(name)
