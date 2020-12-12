@@ -10,8 +10,8 @@ generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 base_height = 900
 
-import plotly.io as pio
-pio.renderers.default = "browser"
+# import plotly.io as pio
+# pio.renderers.default = "browser"
 
 def generate_tempera():
     generate_temp.generate(system)
@@ -30,8 +30,8 @@ def get_color(station: Station, height: float) -> str:
 
 
 def graph_data_set_up() -> tuple:
-    dates = []
     generate_sea()
+    dates = []
     x = []
     y = []
     color = []
