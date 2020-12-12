@@ -23,7 +23,7 @@
 
     \newpage
     \section*{Dataset Description}
-    We gathered sea level data from the University of Hawaii Sea Level center website(UHSLC Legacy Data Portal). The data downloaded from this website includes a collection of daily sea level recording (unit: mm) from different sea level stations across the world during the time span indicated in the data stored in .dat format. An example of sea level data from one station(Peter \& Paul Rocks Brazil) is shown in the image below.
+    We gathered sea level data from the University of Hawaii Sea Level center website(UHSLC Legacy Data Portal), and temperature data from datahub. ("Global Temperature Time Series") The data downloaded from this website includes a collection of daily sea level recording (unit: mm) from different sea level stations across the world during the time span indicated in the data stored in .dat format. An example of sea level data from one station(Peter \& Paul Rocks Brazil) is shown in the image below.
 
     \begin{figure}[h!]
         \centering
@@ -75,11 +75,11 @@
 
     \section*{Computational Plan}
 
-    In order to let the data set be convenient for a computer to use, our group will write functions to read .html format file and .json format file to let python conveniently use this file to do complicated operations and then get assess to the data we need. Then we will create three dataclasses named “SeaLevel”, "Temperature" and "Station" to recored and store the data we need. In the next step, based on our entities, we would create a new class named "ClimateSeaLevelSystem", which is similar to the system we learnt in the lecture, to store all the data mapping to their key element(like station name matches its corresponding Station). After this step, we could create an abstract class named "EntityGenerator" to generate the Temperature data and Station with its corresponding sea level data and store them in our system "ClimateSeaLevelSystem". Then because the data type in our new data set is the continuous variables in the quantitative data type (Chopra \& Alaudeen(2019) page 1), thus we decide to use linear regression, and the scatter plots on map to present data by using plotly.\\
+    In order to let the data set be convenient for a computer to use, our group will write functions to read .html format file and .json format file to let python conveniently use this file to do complicated operations and then get assess to the data we need. ("Extracting Data from HTML with BeautifulSoup") Then we will create three dataclasses named “SeaLevel”, "Temperature" and "Station" to recored and store the data we need. In the next step, based on our entities, we would create a new class named "ClimateSeaLevelSystem", which is similar to the system we learnt in the lecture, to store all the data mapping to their key element(like station name matches its corresponding Station). After this step, we could create an abstract class named "EntityGenerator" to generate the Temperature data and Station with its corresponding sea level data and store them in our system "ClimateSeaLevelSystem". Then because the data type in our new data set is the continuous variables in the quantitative data type (Chopra \& Alaudeen(2019) page 1), thus we decide to use linear regression, and the scatter plots on map to present data by using plotly.\\
     First, we want to present the relationship between the year (x-axis) and average daily sea-level value measured by one station (y-axis). We will first plot all the points out and then draw linear regression based on these points in the graph. What is more, we will also design a function to use linear regression to predict future changes in sea levels at different stations. \\
     Then, we also design to show the relationship between the year (x-axis) and temperature measured by one station (y-axis). The methods is the same to the steps we take in creating the linear regression of sea level. To find the relation between sea level change and climate change, we will combine two lines in one chart. \\
     Finally, we decided to use plotly to draw a world map with scatter plots about how the sea-level changes at all our stations from around 1880 to 2020, using the sea level data, station data from our data set. every single point on the map represents the actual location of each station. In the world map, we decide to use different color of plots to represent whether the sea level of the station is higher or lower than the base height(we also can say the sea level is rising or falling). For stations which reported rising sea level, we will use red to illustrate the intensity of how much sea level raised. For stations that reported falling sea level, we will use blue to illustrate the intensity of how much sea-level falls. Then as time moves forward, the colour will change, given the change in the rising and falling sea level as a vivid animation.\\
-    The plotly has the ability to draw animation which makes it relevant because by using plotly to draw animation, we can have a direct visualization of the data. As we depict the rising and falling of the sea level as time moves forward, the animation conveys in a vivid way the data which is just what we want to study. \\
+    The plotly has the ability to draw animation which makes it relevant because by using plotly to draw animation, we can have a direct visualization of the data. ("Intro to Animations") As we depict the rising and falling of the sea level as time moves forward, the animation conveys in a vivid way the data which is just what we want to study. \\
     Using plotly to draw animation is also appropriate because it reflects how sea level has changed in the recorded time period. This will give us valuable intuition on the data and also the importance of climate change. For example, when you see that as time passes, more and more areas become red and the colour gets darker and darker towards red, you will immediately realize the significance of climate change on our world and how less time we have. Thus, by viewing the animation, one will realize that the problem of climate change is something that we must treat seriously.
 
 
@@ -98,9 +98,16 @@
         \item
         Lewis, Sophie. “Rising Sea Levels on Track to Destroy the Homes of 300 Million People by 2050.” CBS News, CBS Interactive, 30 Oct. 2019, www.cbsnews.com/news/rising-sea-levels-on-track-to-destroy-homes-of-300-million-people-by-2050/.
         \item
-        Shasta Darlington. "Deforestation in Brazilian Amazon surges to 12-year high". CNN, CNN World, https://edition.cnn.com/2020/12/01/americas/deforestation-brazil-amazon-bolsonaro-intl/index.html
+        Shasta Darlington. "Deforestation in Brazilian Amazon surges to 12-year high". CNN World, CNN. 1 Dec, 2020 . https://edition.cnn.com/2020/12/01/americas/deforestation-brazil-amazon-bolsonaro-intl/index.html
         \item
-        "This is what climate change looks like". CNN, CNN World. https://edition.cnn.com/2020/12/11/world/gallery/climate-change-effects-penguins-2020-spc/index.html .
+        "This is what climate change looks like". CNN World, CNN. 11 Dec, 2020. https://edition.cnn.com/2020/12/11/world/gallery/climate-change-effects-penguins-2020-spc/index.html
+        \item
+        Gaurav Singhal. "Extracting Data from HTML with BeautifulSoup". Pluralsight. https://www.pluralsight.com/guides/extracting-data-html-beautifulsoup
+        \item
+        "Intro to animations in Python". Graphing Libraries, Plotly. https://plotly.com/python/animations/
+        \item
+        "Global Temperature Time Series". Datahub, Datahub.
+        https://datahub.io/core/global-temp#python
     \end{enumerate}
 
 % NOTE: LaTeX does have a built-in way of generating references automatically,
