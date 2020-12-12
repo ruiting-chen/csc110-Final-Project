@@ -3,13 +3,14 @@ from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
 from linear_regression import go_plot
 from entities import Station
+import datetime
 
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 
-import plotly.io as pio
-pio.renderers.default = "browser"
+# import plotly.io as pio
+# pio.renderers.default = "browser"
 
 def generate_tempera():
     generate_temp.generate(system)
@@ -19,13 +20,14 @@ def generate_sea():
     generate_station.generate(system)
 
 
-def get_color(station: Station, height: float) -> str:
-    interval = (station.max_height - station.min_height) / 6
-    colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple']
-    for i in range(1, 7):
-        if height <= station.min_height + interval * i:
-            return colors[i - 1]
-
+def get_color(start_date: datetime.date, station: Station, height: float) -> str:
+    starting_height = station.sea_level[start_date]
+    # interval = (station.max_height - station.min_height) / 6
+    colors = ['blue', 'red']
+    if height <= starting_height:
+        return colors[0]
+    else:
+        return colors[1]
 
 # def graph_data_set_up_old() -> tuple:
 #     generate_sea()
@@ -81,6 +83,7 @@ def graph_data_set_up() -> tuple:
 
     num_station = len(system.get_station())
     date_list = sorted(system.get_dates())[-360:]
+    starting_date = date_list[0]
     print(len(date_list))
     for date in date_list:
         print(date)
@@ -94,7 +97,7 @@ def graph_data_set_up() -> tuple:
             if date not in station_obj.sea_level:
                 colour = 'white'
             else:
-                colour = get_color(station_obj, station_obj.sea_level[date])
+                colour = get_color(starting_date, station_obj, station_obj.sea_level[date])
                 # print(colour)
             x.append(la)
             y.append(lon)
