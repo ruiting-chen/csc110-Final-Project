@@ -1,5 +1,6 @@
+"""TODO: Write docstring"""
 import datetime
-from typing import Dict, Tuple, Set
+from typing import Dict, Tuple
 
 # This is the Python module containing the individual entity data classes.
 from entities import Temperature, Station, SeaLevel
@@ -22,9 +23,9 @@ class ClimateSeaLevelSystem:
     #       This represents all the stations in the system.
 
     _temperatures: Dict[datetime.date, Temperature]
-    _sea_levels: Dict[Tuple[datetime.date, Station], SeaLevel]
+    _sea_levels: Dict[Tuple[datetime.date, str], SeaLevel]
     _stations: Dict[str, Station]
-    _sea_level_dates: Set
+    _sea_level_dates: set
 
     def __init__(self) -> None:
         """Initialize a new food delivery system.
@@ -36,16 +37,20 @@ class ClimateSeaLevelSystem:
         self._stations = {}
         self._sea_level_dates = set()
 
-    def get_temp(self):
+    def get_temp(self) -> dict:
+        """TODO: Write docstring"""
         return self._temperatures
 
-    def get_station(self):
+    def get_station(self) -> dict:
+        """TODO: Write docstring"""
         return self._stations
 
-    def get_dates(self):
+    def get_dates(self) -> set:
+        """TODO: Write docstring"""
         return self._sea_level_dates
 
     def find_min_temp(self) -> datetime.date:
+        """TODO: Write docstring"""
         return min(self._temperatures.keys())
 
     def add_temperature(self, temperature: Temperature) -> bool:
