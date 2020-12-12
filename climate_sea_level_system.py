@@ -98,4 +98,6 @@ class ClimateSeaLevelSystem:
 
         Do NOT add the date if the date already exists."""
         for date in date_list:
+            if date in self._sea_level_dates:
+                continue
             self._sea_level_dates.add(date)
