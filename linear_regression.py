@@ -1,3 +1,4 @@
+"""TODO: Write docstring"""
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
@@ -11,34 +12,18 @@ generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 
 
-def generate_tempera():
+def generate_tempera() -> None:
+    """TODO: Write docstring"""
     generate_temp.generate(system)
 
 
-def generate_sea(station: str):
+def generate_sea(station: str) -> None:
+    """TODO: Write docstring"""
     generate_station.generate_one(system, station)
 
 
-# def get_compare_old(station=None) -> list:
-#     if station is None:
-#         new_lst = []
-#         lst_temp = system.get_temp()
-#         base_month = system.find_min_temp()
-#         for month in lst_temp:
-#             interval = (month - base_month).days
-#             new_lst.append((interval, lst_temp[month].temperature, month))
-#     else:
-#         dic = station.sea_level
-#         new_lst = []
-#         base_month = min(dic.keys())
-#         for month in dic:
-#             interval = (month - base_month).days
-#             new_lst.append((interval, dic[month], month))
-#
-#     return new_lst
-
-
 def get_compare(station=None) -> list:
+    """TODO: Write docstring"""
     sea_levels = station.sea_level
     temperatures = system.get_temp()
 
@@ -153,38 +138,6 @@ def find_average(points: list) -> float:
     return sum(points) / len(points)
 
 
-# def run_example_temp_old() -> tuple:
-#     """Run an example use of the functions in this file.
-#
-#     Follow these example steps :
-#       1. Generates some random data points.
-#       2. Converts the points into the format expected by plotly.
-#       3. Performs a simple linear regression on the points.
-#       4. Plots the points and the line based on the regression using plotly.
-#       5. Calculates the R squared value for the regression model with this data.
-#       6. Returns the linear regression model and the R squared value.
-#     """
-#     generate_tempera()
-#     points = get_compare()
-#     new_points = [(tup[2], tup[1]) for tup in points]
-#     separated_coordinates = convert_points(new_points)
-#     x_coords = separated_coordinates[0]
-#     x_min = min(x_coords)
-#     x_max = max(x_coords)
-#     num_tup = convert_points(points)
-#     y_max = max(num_tup[0])
-#     y_coords = separated_coordinates[1]
-#
-#     # Do a simple linear regression. Returns the (a, b) constants for
-#     # the line y = a + b * x.
-#     model = simple_linear_regression(points)
-#     a = model[0]
-#     b = model[1]
-#
-#     # Plot all the data points AND a line based on the regression
-#     return (x_coords, y_coords, a, b, x_min, x_max, y_max, num_tup)
-
-
 def run_example(station: str) -> list:
     """Run an example use of the functions in this file.
 
@@ -251,7 +204,7 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
     # Add the regression line
     r = calculate_r_squared(sea[-1], sea[2], sea[3])
     fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
-                                                evaluate_line(sea[2], sea[3], sea[6])],
+                                                    evaluate_line(sea[2], sea[3], sea[6])],
                              mode='lines', marker={'color': 'DarkBlue'},
                              name=f'Sea Level Regression line R^2 = {r}'), secondary_y=True)
 
@@ -269,6 +222,7 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
 
 
 def go_plot(station: str) -> None:
+    """TODO: Write docstring"""
     # temp_tup = run_example_temp()
     data = run_example(station)
     plot(data[0], data[1], station)
