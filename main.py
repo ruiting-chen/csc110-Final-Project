@@ -5,13 +5,9 @@ from linear_regression import go_plot
 from climate_sea_level_system import ClimateSeaLevelSystem
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 
+# When having trouble opening the graph, you can uncomment the following code and try again.
 # import plotly.io as pio
 # pio.renderers.default = "browser"
-
-# Created instances for the next two functions.
-system = ClimateSeaLevelSystem()
-generate_temp = GenerateTemperature()
-generate_station = GenerateStationAndSeaLevel()
 
 
 def generate_tempera() -> None:
@@ -26,14 +22,13 @@ def generate_sea() -> None:
 
 def see_detail(station: str) -> None:
     """Invoke the go_plot function in the linear_regression module and pass in the station name for it."""
-    go_plot(station)
+    go_plot(station, system)
 
 
 def graph_data_set_up() -> tuple:
     """Set up all the datq for drawing the animation graph.
 
     It set up the color, location, name, and dates of each station as well as the total number of stations."""
-    generate_sea()
     dates = []
     x = []
     y = []
@@ -43,9 +38,6 @@ def graph_data_set_up() -> tuple:
 
     date_list = sorted(system.get_dates())[-360:]
     starting_date = date_list[0]
-    print(len(date_list))
-    for date in date_list:
-        print(date)
 
     for date in date_list:
         dates.append(f'{date.year}-{date.month}')
@@ -71,6 +63,8 @@ def graph_data_set_up() -> tuple:
 def main() -> None:
     """The main function that integrates everything in this project and show the animation graph. It also calls
     see_regression function to show the linear regression."""
+    generate_tempera()
+    generate_sea()
     draw_figure(graph_data_set_up())
     see_regression()
     print("Feel free to cal 'see_regression' if you want to see data about other stations.")
@@ -91,4 +85,10 @@ def see_regression() -> None:
 
 
 if __name__ == '__main__':
+    # Created instances for the next two functions.
+    system = ClimateSeaLevelSystem()
+    generate_temp = GenerateTemperature()
+    generate_station = GenerateStationAndSeaLevel()
+
+    # Run the main function.
     main()

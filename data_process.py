@@ -1,4 +1,4 @@
-"""TODO: write docstring"""
+"""This python module contains all functions needed for extracting data from the internet and process these data."""
 from typing import List, Any, Dict, Tuple
 from bs4 import BeautifulSoup
 import requests

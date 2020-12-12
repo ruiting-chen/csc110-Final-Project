@@ -1,29 +1,19 @@
-"""TODO: Write docstring"""
+"""This python module contains all functions needed to draw the linear regression of a cretain station."""
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from generates import GenerateTemperature, GenerateStationAndSeaLevel
+from entities import Station
 from climate_sea_level_system import ClimateSeaLevelSystem
 
+
+# When having trouble opening the graph, you can uncomment the following code and try again.
 # import plotly.io as pio
 # pio.renderers.default = "browser"
 
-system = ClimateSeaLevelSystem()
-generate_temp = GenerateTemperature()
-generate_station = GenerateStationAndSeaLevel()
 
+def get_compare(station: Station, system: ClimateSeaLevelSystem) -> list:
+    """Return a list containing the temperature data and the sea level data at the input station (if any).
 
-def generate_tempera() -> None:
-    """TODO: Write docstring"""
-    generate_temp.generate(system)
-
-
-def generate_sea(station: str) -> None:
-    """TODO: Write docstring"""
-    generate_station.generate_one(system, station)
-
-
-def get_compare(station=None) -> list:
-    """TODO: Write docstring"""
+    The temperature data is universal, whereas the sea level data is for the input station."""
     sea_levels = station.sea_level
     temperatures = system.get_temp()
 
@@ -43,27 +33,7 @@ def get_compare(station=None) -> list:
 
 
 def evaluate_line(a: float, b: float, x: float) -> float:
-    """Evaluate the linear function y = a + bx for the given a, b, and x values
-    with the given error term.
-
-    More precisely, this function first calculates a random number e between
-    -error and error, inclusive, and then returns a + bx + e. When error == 0,
-    this function simply returns a + bx.
-
-    You may ASSUME that:
-        - error >= 0
-
-    Hint: use the random.uniform function, which takes in two numbers and
-    returns a random number between them, inclusive. For example,
-    random.uniform(-10, 10) returns a random number between -10 and 10.
-    random.uniform(0, 0) returns 0.
-
-    Because of the randomness, we can't specify an exact doctest, but we can
-    write a doctest based on the range of possible values:
-
-    >>> result = evaluate_line(5.0, 1.0, 10.0)  # y = 5.0 + 1.0 * 10.0, with error 0.5
-    >>> -0.5 <= result - 15.0 <= 0.5
-    True
+    """Evaluate the linear function y = a + bx for the given a, b, and x values.
     """
     return a + b * x
 
@@ -82,21 +52,8 @@ def convert_points(points: list) -> tuple:
 def simple_linear_regression(points: list) -> tuple:
     """Perform a linear regression on the given points.
 
-    points is a list of pairs of floats: [(x_1, y_1), (x_2, y_2), ...]
     This function returns a pair of floats (a, b) such that the line
     y = a + bx is the approximation of this data.
-
-    Further reading: https://en.wikipedia.org/wiki/Simple_linear_regression
-
-    You may ASSUME that:
-        - len(points) > 0
-        - each element of points is a tuple of two floats
-
-    >>> simple_linear_regression([(1.0, 1.0), (2.0, 2.0), (3.0, 3.0)])
-    (0.0, 1.0)
-
-    Hint: you might want to define a separate function that calculates the average
-    of a collection of numbers.
     """
     converted_version = convert_points(points)
     average_x = find_average(converted_version[0])
@@ -110,17 +67,10 @@ def simple_linear_regression(points: list) -> tuple:
 
 def calculate_r_squared(converted_version: tuple, a: float, b: float) -> float:
     """Return the R squared value when the given points are modelled as the line y = a + bx.
-
-    points is a list of pairs of numbers: [(x_1, y_1), (x_2, y_2), ...]
-
-    Assume that:
-        - points is not empty and contains tuples
-        - each element of points is a tuple containing two floats
-
-    Further reading: https://en.wikipedia.org/wiki/Coefficient_of_determination
     """
     average_y = find_average(converted_version[1])
-    total_sum_of_squares = sum([(converted_version[1][i] - average_y) ** 2 for i in range(len(converted_version[0]))])
+    total_sum_of_squares = sum([(converted_version[1][i] - average_y) ** 2
+                                for i in range(len(converted_version[0]))])
     residual_sum_of_squares = sum([(converted_version[1][i] - (a + b * converted_version[0][i])) ** 2
                                    for i in range(len(converted_version[0]))])
     r = 1 - residual_sum_of_squares / total_sum_of_squares
@@ -138,20 +88,13 @@ def find_average(points: list) -> float:
     return sum(points) / len(points)
 
 
-def run_example(station: str) -> list:
-    """Run an example use of the functions in this file.
-
-    Follow these example steps :
-      1. Generates some random data points.
-      2. Converts the points into the format expected by plotly.
-      3. Performs a simple linear regression on the points.
-      4. Plots the points and the line based on the regression using plotly.
-      5. Calculates the R squared value for the regression model with this data.
-      6. Returns the linear regression model and the R squared value.
+def extract_data(station: str, system: ClimateSeaLevelSystem) -> list:
+    """Extract and process data from the input station and return a tuple containing the processed data to be used
+    when drawing the linear regression.
     """
-    generate_tempera()
-    generate_sea(station)
-    points_list = get_compare(system.get_station()[station])
+    # generate_tempera()
+    # generate_sea(station)
+    points_list = get_compare(system.get_station()[station], system)
     graphing_data = []
     for points in points_list:
         new_points = [(tup[2], tup[1]) for tup in points]
@@ -175,33 +118,29 @@ def run_example(station: str) -> list:
 
 
 def plot(tmp: tuple, sea: tuple, station: str) -> None:
-    """Plot the given x- and y-coordinates and linear regression model using plotly.
+    """Plot the temperature and sea level data of the input station and linear regression model using plotly.
 
-    The linear regression model is the line y = a + bx.
-    Like plot_points, this function displays the results in a web browser.
-
-    Note: this function calls your evaluate_line function, so make sure that you've
-    tested your evaluate_line function carefully before try to call this one.
+    The linear regression model is the line y = a + bx and displays the results in a web browser.
     """
     # Create a blank figure
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # Add the raw data
+    # Add the temperature data
     fig.add_trace(go.Scatter(x=tmp[0], y=tmp[1], mode='markers', marker={'color': 'yellow'}, name='Temperature Data'),
                   secondary_y=False)
 
-    # Add the raw data
+    # Add the sea level data
     fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', marker={'color': 'green'}, name='Sea Level Data'),
                   secondary_y=True)
 
-    # Add the regression line
+    # Add the regression line for temperature data
     r = calculate_r_squared(tmp[-1], tmp[2], tmp[3])
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
                                                     evaluate_line(tmp[2], tmp[3], tmp[6])],
                              mode='lines', marker={'color': 'red'},
                              name=f'Temperature Anomalies Regression line R^2 = {r}'), secondary_y=False)
 
-    # Add the regression line
+    # Add the regression line for sea level data
     r = calculate_r_squared(sea[-1], sea[2], sea[3])
     fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
                                                     evaluate_line(sea[2], sea[3], sea[6])],
@@ -221,8 +160,10 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
     fig.show()
 
 
-def go_plot(station: str) -> None:
-    """TODO: Write docstring"""
-    # temp_tup = run_example_temp()
-    data = run_example(station)
+def go_plot(station: str, system: ClimateSeaLevelSystem) -> None:
+    """It draw the linear regression of the input station.
+
+    The function that integrate all functions in this python module.
+    """
+    data = extract_data(station, system)
     plot(data[0], data[1], station)

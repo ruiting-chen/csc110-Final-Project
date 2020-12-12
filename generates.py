@@ -1,4 +1,4 @@
-"""TODO: Write docstring"""
+"""This python module contains classes for generating all entities from the data collected."""
 
 import data_process
 from data_process import processed_sea_level_data, process_single_sea_level
@@ -33,7 +33,9 @@ class GenerateStationAndSeaLevel(EntityGenerator):
     """
 
     def generate(self, system: ClimateSeaLevelSystem) -> None:
-        """Mutate system by generating stations.
+        """Mutate system by generating all stations.
+
+        For now, the number of stations generated is limited to 2.
         """
         station_dict = processed_sea_level_data.keys()
         for station in station_dict:
@@ -46,11 +48,10 @@ class GenerateStationAndSeaLevel(EntityGenerator):
             new_station = Station(station, location, sea_level[0], min_height, max_height)
             system.add_station(new_station)
             system.add_sea_level_date(sea_level[1])
-            print(f'{station} is added. Please be patient')
-            print(f'{50 - len(system.get_station())} is left')
+            print(f'{station} is added.')
 
     def generate_one(self, system: ClimateSeaLevelSystem, station: str) -> None:
-        """Mutate system by generating stations.
+        """Mutate system by generating one station.
         """
         location = processed_sea_level_data[station][0]
         sea_level = process_single_sea_level(station)
