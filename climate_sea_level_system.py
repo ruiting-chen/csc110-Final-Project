@@ -94,10 +94,6 @@ class ClimateSeaLevelSystem:
         return True
 
     def add_sea_level_date(self, date_list) -> None:
-        """Add given date list to the system.
-
-        Do NOT add the date if the date already exists."""
+        """Add given date list to the system."""
         for date in date_list:
-            if date in self._sea_level_dates:
-                continue
             self._sea_level_dates.add(date)
