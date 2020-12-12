@@ -85,7 +85,7 @@ def process_single_sea_level(station: Station) -> dict:
     sea-level data from the internet.
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
-    csv_web = processed_sea_level_data[station][1]
+    csv_web = processed_sea_level_data[station][3]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
     read = csv.reader(lst_line)
