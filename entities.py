@@ -1,8 +1,9 @@
+"""TODO: Write docstring"""
 from __future__ import annotations
 
 from dataclasses import dataclass
 import datetime
-from typing import Tuple, List
+from typing import Tuple
 
 
 @dataclass

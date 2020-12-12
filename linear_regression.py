@@ -16,7 +16,7 @@ def generate_tempera():
 
 
 def generate_sea(station: str):
-    generate_station.generate(system, station)
+    generate_station.generate_one(system, station)
 
 
 # def get_compare_old(station=None) -> list:
@@ -55,7 +55,6 @@ def get_compare(station=None) -> list:
         new_lst_temp.append((interval_temp, temperatures[month].temperature, month))
 
     return [new_lst_temp, new_lst_sea]
-
 
 
 def evaluate_line(a: float, b: float, x: float) -> float:

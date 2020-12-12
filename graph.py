@@ -1,5 +1,4 @@
 import plotly.graph_objects as go
-import datetime
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
 from linear_regression import go_plot
@@ -17,7 +16,7 @@ def generate_tempera():
 
 
 def generate_sea():
-    generate_station.generate_all(system)
+    generate_station.generate(system)
 
 
 def get_color(station: Station, height: float) -> str:

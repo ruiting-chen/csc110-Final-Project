@@ -3,13 +3,13 @@
 import data_process
 from data_process import processed_sea_level_data, process_single_sea_level
 from climate_sea_level_system import ClimateSeaLevelSystem
-from entities import Station, Temperature, SeaLevel
+from entities import Station, Temperature
 
 
 class EntityGenerator:
     """An abstract class that generate all entities."""
 
-    def generate(self, system: ClimateSeaLevelSystem, entity=None) -> None:
+    def generate(self, system: ClimateSeaLevelSystem) -> None:
         """generating new entities based on the data collected.
        """
         raise NotImplementedError
@@ -18,7 +18,7 @@ class EntityGenerator:
 class GenerateTemperature(EntityGenerator):
     """A class that is responsible for generating temperatures."""
 
-    def generate(self, system: ClimateSeaLevelSystem, entity=None) -> None:
+    def generate(self, system: ClimateSeaLevelSystem) -> None:
         """Mutate system by generating temperatures.
         """
         lst_temp = data_process.process_temperature_data()
@@ -32,7 +32,7 @@ class GenerateStationAndSeaLevel(EntityGenerator):
     """A class that is responsible for generating station.
     """
 
-    def generate_all(self, system: ClimateSeaLevelSystem) -> None:
+    def generate(self, system: ClimateSeaLevelSystem) -> None:
         """Mutate system by generating stations.
         """
         station_dict = processed_sea_level_data.keys()
@@ -49,7 +49,7 @@ class GenerateStationAndSeaLevel(EntityGenerator):
             print(f'{station} is added. Please be patient')
             print(f'{50 - len(system.get_station())} is left')
 
-    def generate(self, system: ClimateSeaLevelSystem, entity=None) -> None:
+    def generate_one(self, system: ClimateSeaLevelSystem, station: str) -> None:
         """Mutate system by generating stations.
         """
         location = processed_sea_level_data[entity][0]

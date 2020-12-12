@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 import requests
 import datetime
 from datapackage import Package
-from entities import Station
 from statistics import mean
 import urllib.request
 import csv
@@ -87,7 +86,7 @@ def average(lst: List[List[Any]]) -> Dict[datetime.date, float]:
     return average_dict
 
 
-def process_single_sea_level(station: Station) -> Tuple[Dict[datetime.date, float], list]:
+def process_single_sea_level(station: str) -> Tuple[Dict[datetime.date, float], list]:
     """This function will extract sea-level data from the internet.
 
     This function will extract the corresponding sea-level data of the
@@ -109,7 +108,5 @@ def process_single_sea_level(station: Station) -> Tuple[Dict[datetime.date, floa
             date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
             height = int(row[3])
             useful_data_lst.append([date, height])
-
-
 
     return (average(useful_data_lst), total_month_time_lst)
