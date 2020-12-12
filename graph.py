@@ -22,7 +22,6 @@ def generate_sea():
 
 def get_color(start_date: datetime.date, station: Station, height: float) -> str:
     starting_height = station.sea_level[start_date]
-    # interval = (station.max_height - station.min_height) / 6
     colors = ['blue', 'red']
     if height <= starting_height:
         return colors[0]
@@ -80,13 +79,14 @@ def graph_data_set_up() -> tuple:
     y = []
     color = []
     station_name = []
-
     num_station = len(system.get_station())
+
     date_list = sorted(system.get_dates())[-360:]
     starting_date = date_list[0]
     print(len(date_list))
     for date in date_list:
         print(date)
+
     for date in date_list:
         dates.append(f'{date.year}-{date.month}')
         inner_lst = []
