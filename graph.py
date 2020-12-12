@@ -21,14 +21,11 @@ def generate_sea():
     generate_station.generate_all(system)
 
 
-def get_color(height: float) -> str:
-    stations = system.get_station()
-    global_min_height = min(stations[x].min_height for x in stations)
-    global_max_height = max(stations[x].max_height for x in stations)
-    interval = (global_max_height - global_min_height) / 4
+def get_color(station: Station, height: float) -> str:
+    interval = (station.max_height - station.min_height) / 4
     colors = ['blue', 'green', 'yellow', 'red']
     for i in range(1, 5):
-        if height <= global_min_height + interval * i:
+        if height <= station.min_height + interval * i:
             return colors[i - 1]
 
 
@@ -55,16 +52,17 @@ def graph_data_set_up() -> tuple:
         dates.append(month)
         inner_lst = []
         for station in system.get_station():
-            if len(system.get_station()[station].sea_level.keys()) < 120:
+            station_obj = system.get_station()[station]
+            if len(station_obj.sea_level.keys()) < 120:
                 continue
-            lon = system.get_station()[station].location[0]
-            la = system.get_station()[station].location[1]
+            lon = station_obj.location[0]
+            la = station_obj.location[1]
             new_date = min_month + datetime.timedelta(month * 30)
             day = datetime.date(new_date.year, new_date.month, 6)
-            if day not in system.get_station()[station].sea_level:
+            if day not in station_obj.sea_level:
                 colour = 'black'
             else:
-                colour = get_color(system.get_station()[station].sea_level[day])
+                colour = get_color(station_obj, station_obj.sea_level[day])
                 print(colour)
             x.append(la)
             y.append(lon)
