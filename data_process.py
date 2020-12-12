@@ -31,8 +31,9 @@ def process_sea_level_data() -> dict:
     all_data = get_sea_level_data()
     useful_data = {}
     for data in all_data:
-        l = [(float(data[5]), float(data[4])), data[8]]
-        useful_data[data[2]] = l
+        if int(data[6][:4]) < 1990:
+            l = [data[6], data[7], (float(data[5]), float(data[4])), data[8]]
+            useful_data[data[2]] = l
     return useful_data
 
 
