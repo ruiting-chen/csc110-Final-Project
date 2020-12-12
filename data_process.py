@@ -38,7 +38,7 @@ def process_sea_level_data() -> Dict[str, list]:
     useful_data = {}
     for data in all_data:
 
-        # screen out sea-level data that started recording after year 1990
+        # filter out sea-level data that started recording after year 1990
         if int(data[6][:4]) < 1990:
             # store the latitude, longitude and csv url of each list of
             # sea level data in useful_data dictionary
@@ -87,7 +87,7 @@ def average(lst: List[List[Any]]) -> Dict[datetime.date, float]:
     return average_dict
 
 
-def process_single_sea_level(station: Station) -> Dict[datetime.date, float]:
+def process_single_sea_level(station: Station) -> Tuple[Dict[datetime.date, float], list]:
     """This function will extract sea-level data from the internet.
 
     This function will extract the corresponding sea-level data of the
@@ -98,13 +98,18 @@ def process_single_sea_level(station: Station) -> Dict[datetime.date, float]:
     read = csv.reader(lst_line)
 
     # change the date of each data to datetime.date type
-    lst = []
+    total_month_time_lst = []
+    useful_data_lst = []
     for row in read:
+        month = datetime.date(int(row[0]), int(row[1]), 6)
+        total_month_time_lst.append(month)
 
-        # screen out outlier data: -32767
+        # filter out outlier data: -32767
         if int(row[3]) >= 0:
             date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
             height = int(row[3])
-            lst.append([date, height])
+            useful_data_lst.append([date, height])
 
-    return average(lst)
+
+
+    return (average(useful_data_lst), total_month_time_lst)

@@ -9,8 +9,8 @@ system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 
-# import plotly.io as pio
-# pio.renderers.default = "browser"
+import plotly.io as pio
+pio.renderers.default = "browser"
 
 def generate_tempera():
     generate_temp.generate(system)
@@ -80,15 +80,11 @@ def graph_data_set_up() -> tuple:
     color = []
     station_name = []
 
-    max_date_station = ''
-    max_date = datetime.date(1800, 1, 1)
-    for station in system.get_station():
-        if system.get_station()[station].max_date > max_date:
-            max_date_station = system.get_station()[station]
-
     num_station = len(system.get_station())
-    date_list = sorted(max_date_station.sea_level)[-360:]
-    print(date_list)
+    date_list = sorted(system.get_dates())[-360:]
+    print(len(date_list))
+    for date in date_list:
+        print(date)
     for date in date_list:
         dates.append(f'{date.year}-{date.month}')
         inner_lst = []

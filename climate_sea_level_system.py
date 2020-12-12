@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Set
 
 # This is the Python module containing the individual entity data classes.
 from entities import Temperature, Station, SeaLevel
@@ -24,6 +24,7 @@ class ClimateSeaLevelSystem:
     _temperatures: Dict[datetime.date, Temperature]
     _sea_levels: Dict[Tuple[datetime.date, Station], SeaLevel]
     _stations: Dict[str, Station]
+    _sea_level_dates: Set
 
     def __init__(self) -> None:
         """Initialize a new food delivery system.
@@ -33,12 +34,16 @@ class ClimateSeaLevelSystem:
         self._temperatures = {}
         self._sea_levels = {}
         self._stations = {}
+        self._sea_level_dates = set()
 
     def get_temp(self):
         return self._temperatures
 
     def get_station(self):
         return self._stations
+
+    def get_dates(self):
+        return self._sea_level_dates
 
     def find_min_temp(self) -> datetime.date:
         return min(self._temperatures.keys())
@@ -81,6 +86,13 @@ class ClimateSeaLevelSystem:
             return False
         self._stations[identifier] = station
         return True
+
+    def add_sea_level_date(self, date_list) -> None:
+        """Add given date list to the system.
+
+        Do NOT add the date if the date already exists."""
+        for date in date_list:
+            self._sea_level_dates.add(date)
 
 
 if __name__ == '__main__':
