@@ -54,6 +54,9 @@ class GenerateStationAndSeaLevel(EntityGenerator):
         """
         location = processed_sea_level_data[entity][0]
         sea_level = process_single_sea_level(entity)
-        new_station = Station(entity, location, sea_level)
+        min_height = min(sea_level[0][data] for data in sea_level[0])
+        max_height = max(sea_level[0][data] for data in sea_level[0])
+        new_station = Station(entity, location, sea_level[0], min_height, max_height)
         system.add_station(new_station)
+        system.add_sea_level_date(sea_level[1])
         print(f'{entity} is added')
