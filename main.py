@@ -32,12 +32,14 @@ def graph_data_set_up() -> tuple:
     y = []
     color = []
     station_name = []
-
     num_station = len(system.get_station())
+
     date_list = sorted(system.get_dates())[-360:]
+    starting_date = date_list[0]
     print(len(date_list))
     for date in date_list:
         print(date)
+
     for date in date_list:
         dates.append(f'{date.year}-{date.month}')
         inner_lst = []
@@ -48,7 +50,7 @@ def graph_data_set_up() -> tuple:
             if date not in station_obj.sea_level:
                 colour = 'white'
             else:
-                colour = get_color(station_obj, station_obj.sea_level[date])
+                colour = get_color(starting_date, station_obj, station_obj.sea_level[date])
                 # print(colour)
             x.append(la)
             y.append(lon)
@@ -62,8 +64,8 @@ def graph_data_set_up() -> tuple:
 def main() -> None:
     """TODO: Write docstring"""
     draw_figure(graph_data_set_up())
-    print("Feel free to cal 'see_regression' if you want to see data about other stations.")
     see_regression()
+    print("Feel free to cal 'see_regression' if you want to see data about other stations.")
 
 
 def see_regression() -> None:
