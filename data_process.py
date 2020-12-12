@@ -1,5 +1,5 @@
 """TODO: write docstring"""
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Tuple
 from bs4 import BeautifulSoup
 import requests
 import datetime
@@ -16,6 +16,8 @@ def get_sea_level_data() -> List[List[str]]:
     r = requests.get('http://uhslc.soest.hawaii.edu/data/fd.html').text
     soup = BeautifulSoup(r, features="html.parser")
     info = soup.find_all('td')
+
+    # every 12 element in info is a line of data in the website
     info_lst = []
     for i in range(len(info) // 12):
         new_l = []
@@ -26,13 +28,21 @@ def get_sea_level_data() -> List[List[str]]:
     return info_lst
 
 
-def process_sea_level_data() -> dict:
-    """Return a list of sea level data in the form that we are going to use"""
+def process_sea_level_data() -> Dict[str, list]:
+    """Return a dictionary of useful sea level data
+    where each key is a station name and each value is a list whose first element
+    is a tuple of the station's latitude and longitude and second element is a csv url
+    that contains all the sea level data at that station
+    """
     all_data = get_sea_level_data()
     useful_data = {}
     for data in all_data:
+
+        # screen out sea-level data that started recording after year 1990
         if int(data[6][:4]) < 1990:
-            l = [data[6], data[7], (float(data[5]), float(data[4])), data[8]]
+            # store the latitude, longitude and csv url of each list of
+            # sea level data in useful_data dictionary
+            l = [(float(data[5]), float(data[4])), data[8]]
             useful_data[data[2]] = l
     return useful_data
 
@@ -60,7 +70,7 @@ def process_temperature_data() -> List[List[Any]]:
     return temp_lst
 
 
-def average(lst: List[List[Any]]) -> dict:
+def average(lst: List[List[Any]]) -> Dict[datetime.date, float]:
     """Return a dictionary containing each month of each year that have valid measurements and
              the average of all measurements during that month."""
     average_dict = {}
@@ -77,25 +87,24 @@ def average(lst: List[List[Any]]) -> dict:
     return average_dict
 
 
-def process_single_sea_level(station: Station) -> dict:
+def process_single_sea_level(station: Station) -> Dict[datetime.date, float]:
     """This function will extract sea-level data from the internet.
 
-    This function will promote the caller to type in a station that he want to check out.
-    Base on the station the user typed in, this function will extract the corresponding
-    sea-level data from the internet.
-
-    If the input station is not among the ones promoted, an InvalidStationError will occur."""
-    csv_web = processed_sea_level_data[station][3]
+    This function will extract the corresponding sea-level data of the
+    input station name from the internet."""
+    csv_web = processed_sea_level_data[station][1]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
     read = csv.reader(lst_line)
 
+    # change the date of each data to datetime.date type
     lst = []
     for row in read:
+
+        # screen out outlier data: -32767
         if int(row[3]) >= 0:
             date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
             height = int(row[3])
-            new_lst = [date, height]
-            lst.append(new_lst)
+            lst.append([date, height])
 
     return average(lst)
