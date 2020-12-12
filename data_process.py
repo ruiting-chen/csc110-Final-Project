@@ -41,8 +41,8 @@ def process_sea_level_data() -> Dict[str, list]:
         if int(data[6][:4]) < 1990:
             # store the latitude, longitude and csv url of each list of
             # sea level data in useful_data dictionary
-            l = [(float(data[5]), float(data[4])), data[8]]
-            useful_data[data[2]] = l
+            location_and_url = [(float(data[5]), float(data[4])), data[8]]
+            useful_data[data[2]] = location_and_url
     return useful_data
 
 
@@ -81,7 +81,8 @@ def average(lst: List[List[Any]]) -> Dict[datetime.date, float]:
             average_dict[year_month].append(measure[1])
 
     for month in average_dict:
-        average_dict[month] = mean(average_dict[month])
+        lst = average_dict[month]
+        average_dict[month] = mean(lst)
 
     return average_dict
 
