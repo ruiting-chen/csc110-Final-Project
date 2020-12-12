@@ -1,4 +1,4 @@
-"""TODO: Write docstring"""
+"""This python module contains all functions needed to draw the animation graph."""
 import plotly.graph_objects as go
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
@@ -9,12 +9,13 @@ system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 
+# When having trouble opening the graph, you can uncomment the following code and try again.
 # import plotly.io as pio
 # pio.renderers.default = "browser"
 
 
 def get_color(start_date: datetime.date, station: Station, height: float) -> str:
-    """TODO: Write docstring"""
+    """Return the colour representing the level of increasing/decreasing of the measured sea level at a station."""
     starting_height = station.sea_level[start_date]
     colors = ['blue', 'red']
     if height <= starting_height:
@@ -24,7 +25,7 @@ def get_color(start_date: datetime.date, station: Station, height: float) -> str
 
 
 def draw_figure(tup: tuple) -> None:
-    """TODO: Write docstring"""
+    """The function to draw the animation graph."""
     num_station, color, dates, x, y, station_name = tup
     fig_dict = {
         "data": [],
