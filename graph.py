@@ -77,5 +77,11 @@ def draw_figure(tup: tuple) -> None:
     fig_dict["layout"]["sliders"] = [sliders_dict]
 
     fig = go.Figure(fig_dict)
-    # fig = go.Figure(fig)
+    fig.update_layout(height=1000, margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
+    fig.update_geos(showland=True, landcolor='LightGreen',
+                    showocean=True, oceancolor='LightBlue',
+                    showrivers=True, rivercolor='LightBlue',
+                    showlakes=True, lakecolor='LightBlue',
+                    showcountries=True, countrycolor='White')
+    fig.update_geos(lataxis_showgrid=True, lonaxis_showgrid=True)
     fig.show()
