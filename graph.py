@@ -1,7 +1,7 @@
+"""TODO: Write docstring"""
 import plotly.graph_objects as go
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 from climate_sea_level_system import ClimateSeaLevelSystem
-from linear_regression import go_plot
 from entities import Station
 import datetime
 
@@ -12,15 +12,9 @@ generate_station = GenerateStationAndSeaLevel()
 # import plotly.io as pio
 # pio.renderers.default = "browser"
 
-def generate_tempera():
-    generate_temp.generate(system)
-
-
-def generate_sea():
-    generate_station.generate(system)
-
 
 def get_color(start_date: datetime.date, station: Station, height: float) -> str:
+    """TODO: Write docstring"""
     starting_height = station.sea_level[start_date]
     colors = ['blue', 'red']
     if height <= starting_height:
@@ -30,6 +24,7 @@ def get_color(start_date: datetime.date, station: Station, height: float) -> str
 
 
 def draw_figure(tup: tuple) -> None:
+    """TODO: Write docstring"""
     num_station, color, dates, x, y, station_name = tup
     fig_dict = {
         "data": [],

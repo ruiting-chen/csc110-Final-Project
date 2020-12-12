@@ -4,6 +4,9 @@ from linear_regression import go_plot
 from climate_sea_level_system import ClimateSeaLevelSystem
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 
+# import plotly.io as pio
+# pio.renderers.default = "browser"
+
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
