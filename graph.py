@@ -10,8 +10,8 @@ generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 base_height = 900
 
-# import plotly.io as pio
-# pio.renderers.default = "browser"
+import plotly.io as pio
+pio.renderers.default = "browser"
 
 def generate_tempera():
     generate_temp.generate(system)
@@ -22,9 +22,9 @@ def generate_sea():
 
 
 def get_color(station: Station, height: float) -> str:
-    interval = (station.max_height - station.min_height) / 4
-    colors = ['blue', 'green', 'yellow', 'red']
-    for i in range(1, 5):
+    interval = (station.max_height - station.min_height) / 6
+    colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple']
+    for i in range(1, 7):
         if height <= station.min_height + interval * i:
             return colors[i - 1]
 
@@ -60,7 +60,7 @@ def graph_data_set_up() -> tuple:
             new_date = min_month + datetime.timedelta(month * 30)
             day = datetime.date(new_date.year, new_date.month, 6)
             if day not in station_obj.sea_level:
-                colour = 'black'
+                colour = 'white'
             else:
                 colour = get_color(station_obj, station_obj.sea_level[day])
                 # print(colour)
