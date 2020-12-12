@@ -1,4 +1,5 @@
-"""TODO: Write docstring"""
+"""The main python module that integrate the whole projects can complete all its functions.
+It generates data, draw animation graph and linear regression graph."""
 from graph import draw_figure, get_color
 from linear_regression import go_plot
 from climate_sea_level_system import ClimateSeaLevelSystem
@@ -7,28 +8,31 @@ from generates import GenerateTemperature, GenerateStationAndSeaLevel
 # import plotly.io as pio
 # pio.renderers.default = "browser"
 
+# Created instances for the next two functions.
 system = ClimateSeaLevelSystem()
 generate_temp = GenerateTemperature()
 generate_station = GenerateStationAndSeaLevel()
 
 
 def generate_tempera() -> None:
-    """TODO: Write docstring"""
+    """Generating temperatures based on the measurement collected."""
     generate_temp.generate(system)
 
 
 def generate_sea() -> None:
-    """TODO: Write docstring"""
+    """Generating all stations with its collected sea level data."""
     generate_station.generate(system)
 
 
 def see_detail(station: str) -> None:
-    """TODO: Write docstring"""
+    """Invoke the go_plot function in the linear_regression module and pass in the station name for it."""
     go_plot(station)
 
 
 def graph_data_set_up() -> tuple:
-    """TODO: Write docstring"""
+    """Set up all the datq for drawing the animation graph.
+
+    It set up the color, location, name, and dates of each station as well as the total number of stations."""
     generate_sea()
     dates = []
     x = []
@@ -65,14 +69,17 @@ def graph_data_set_up() -> tuple:
 
 
 def main() -> None:
-    """TODO: Write docstring"""
+    """The main function that integrates everything in this project and show the animation graph. It also calls
+    see_regression function to show the linear regression."""
     draw_figure(graph_data_set_up())
     see_regression()
     print("Feel free to cal 'see_regression' if you want to see data about other stations.")
 
 
 def see_regression() -> None:
-    """TODO: Write docstring"""
+    """A helper function for the main function.
+
+    On its own, it shows the linear regression of all data collected at the input station."""
     all_station = system.get_station().keys()
     station = input('Please type in the station name that you want to see detailed report of. '
                     'Hover over it to see name.')
