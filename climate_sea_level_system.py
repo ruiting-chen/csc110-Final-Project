@@ -1,4 +1,4 @@
-"""TODO: Write docstring"""
+"""Creates a ClimateSeaLevelSystem that keep tracks of all entities created."""
 import datetime
 from typing import Dict, Tuple
 
@@ -21,6 +21,7 @@ class ClimateSeaLevelSystem:
     #       This represents all the sea-levels in the system.
     #   - _stations: a mapping from station name to Station object.
     #       This represents all the stations in the system.
+    #   - _sea_level_dates: TODO: What is this???
 
     _temperatures: Dict[datetime.date, Temperature]
     _sea_levels: Dict[Tuple[datetime.date, str], SeaLevel]
@@ -38,11 +39,11 @@ class ClimateSeaLevelSystem:
         self._sea_level_dates = set()
 
     def get_temp(self) -> dict:
-        """TODO: Write docstring"""
+        """Return the dict contains all temperature measurements."""
         return self._temperatures
 
     def get_station(self) -> dict:
-        """TODO: Write docstring"""
+        """Return the dict contains all stations."""
         return self._stations
 
     def get_dates(self) -> set:
@@ -50,7 +51,7 @@ class ClimateSeaLevelSystem:
         return self._sea_level_dates
 
     def find_min_temp(self) -> datetime.date:
-        """TODO: Write docstring"""
+        """Return the date of the first temperature measurements."""
         return min(self._temperatures.keys())
 
     def add_temperature(self, temperature: Temperature) -> bool:
@@ -98,20 +99,3 @@ class ClimateSeaLevelSystem:
         Do NOT add the date if the date already exists."""
         for date in date_list:
             self._sea_level_dates.add(date)
-
-
-if __name__ == '__main__':
-    import python_ta.contracts
-    python_ta.contracts.DEBUG_CONTRACTS = False
-    python_ta.contracts.check_all_contracts()
-
-    import doctest
-    doctest.testmod(verbose=True)
-
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'extra-imports': ['dataclasses', 'datetime', 'python_ta.contracts', 'math', 'entities'],
-    #     'allowed-io': ['run_example'],
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'C0200', 'R0201']
-    # })
