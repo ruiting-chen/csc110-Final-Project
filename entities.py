@@ -1,4 +1,5 @@
-"""TODO: Write docstring"""
+"""This python module creates and catagorize all data retrieved from internet into 3 classes: Temperature, Station,
+and SeaLevel"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -50,19 +51,3 @@ class SeaLevel:
     date: datetime.date
     height: float
     station: str
-
-
-if __name__ == '__main__':
-    import python_ta.contracts
-    python_ta.contracts.DEBUG_CONTRACTS = False
-    python_ta.contracts.check_all_contracts()
-
-    import doctest
-    doctest.testmod(verbose=True)
-
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'extra-imports': ['dataclasses', 'datetime', 'python_ta.contracts'],
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'C0200']
-    # })
