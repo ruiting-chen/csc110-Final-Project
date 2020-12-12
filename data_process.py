@@ -31,9 +31,11 @@ def process_sea_level_data() -> dict:
     all_data = get_sea_level_data()
     useful_data = {}
     for data in all_data:
-        if int(data[6][:4]) < 1990:
-            l = [data[6], data[7], (float(data[5]), float(data[4])), data[8]]
-            useful_data[data[2]] = l
+        l = [(float(data[5]), float(data[4])), data[8]]
+        useful_data[data[2]] = l
+        # if int(data[6][:4]) < 1990:
+        #     l = [data[6], data[7], (float(data[5]), float(data[4])), data[8]]
+        #     useful_data[data[2]] = l
     return useful_data
 
 
@@ -85,7 +87,7 @@ def process_single_sea_level(station: Station) -> dict:
     sea-level data from the internet.
 
     If the input station is not among the ones promoted, an InvalidStationError will occur."""
-    csv_web = processed_sea_level_data[station][3]
+    csv_web = processed_sea_level_data[station][1]
     csv_file = urllib.request.urlopen(csv_web)
     lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
     read = csv.reader(lst_line)
