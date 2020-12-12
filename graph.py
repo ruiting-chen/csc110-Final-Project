@@ -1,25 +1,12 @@
+"""TODO: Write docstring"""
 import plotly.graph_objects as go
-from generates import GenerateTemperature, GenerateStationAndSeaLevel
-from climate_sea_level_system import ClimateSeaLevelSystem
-from linear_regression import go_plot
 from entities import Station
-
-system = ClimateSeaLevelSystem()
-generate_temp = GenerateTemperature()
-generate_station = GenerateStationAndSeaLevel()
-
 import plotly.io as pio
 pio.renderers.default = "browser"
 
-def generate_tempera():
-    generate_temp.generate(system)
-
-
-def generate_sea():
-    generate_station.generate(system)
-
 
 def get_color(station: Station, height: float) -> str:
+    """TODO: Write docstring"""
     interval = (station.max_height - station.min_height) / 6
     colors = ['blue', 'green', 'yellow', 'orange', 'red', 'purple']
     for i in range(1, 7):
@@ -27,85 +14,8 @@ def get_color(station: Station, height: float) -> str:
             return colors[i - 1]
 
 
-# def graph_data_set_up_old() -> tuple:
-#     generate_sea()
-#     dates = []
-#     x = []
-#     y = []
-#     color = []
-#     station_name = []
-#     min_mon = []
-#     max_mon = []
-#     for station in system.get_station():
-#         if len(system.get_station()[station].sea_level.keys()) < 240:
-#             continue
-#         min_mon.append(min(system.get_station()[station].sea_level.keys()))
-#         max_mon.append(max(system.get_station()[station].sea_level.keys()))
-#
-#     max_month = min(max_mon)
-#     min_month = max(min_mon)
-#     num_station = len(system.get_station())
-#
-#     for month in range((max_month - min_month).days // 30):
-#         dates.append(month)
-#         inner_lst = []
-#         for station in system.get_station():
-#             station_obj = system.get_station()[station]
-#             if len(station_obj.sea_level.keys()) < 120:
-#                 continue
-#             lon = station_obj.location[0]
-#             la = station_obj.location[1]
-#             new_date = min_month + datetime.timedelta(month * 30)
-#             day = datetime.date(new_date.year, new_date.month, 6)
-#             if day not in station_obj.sea_level:
-#                 colour = 'white'
-#             else:
-#                 colour = get_color(station_obj, station_obj.sea_level[day])
-#                 # print(colour)
-#             x.append(la)
-#             y.append(lon)
-#             station_name.append(f'Name of station: {station}')
-#             inner_lst.append(colour)
-#         color.append(inner_lst)
-#         # print(color)
-#     return (num_station, color, dates, x, y, station_name)
-
-
-def graph_data_set_up() -> tuple:
-    generate_sea()
-    dates = []
-    x = []
-    y = []
-    color = []
-    station_name = []
-
-    num_station = len(system.get_station())
-    date_list = sorted(system.get_dates())[-360:]
-    print(len(date_list))
-    for date in date_list:
-        print(date)
-    for date in date_list:
-        dates.append(f'{date.year}-{date.month}')
-        inner_lst = []
-        for station in system.get_station():
-            station_obj = system.get_station()[station]
-            lon = station_obj.location[0]
-            la = station_obj.location[1]
-            if date not in station_obj.sea_level:
-                colour = 'white'
-            else:
-                colour = get_color(station_obj, station_obj.sea_level[date])
-                # print(colour)
-            x.append(la)
-            y.append(lon)
-            station_name.append(f'Name of station: {station}')
-            inner_lst.append(colour)
-        color.append(inner_lst)
-        # print(color)
-    return (num_station, color, dates, x, y, station_name)
-
-
 def draw_figure(tup: tuple) -> None:
+    """TODO: Write docstring"""
     num_station, color, dates, x, y, station_name = tup
     fig_dict = {
         "data": [],
@@ -160,12 +70,3 @@ def draw_figure(tup: tuple) -> None:
     fig = go.Figure(fig_dict)
     # fig = go.Figure(fig)
     fig.show()
-
-
-def see_detail(station: str):
-    go_plot(station)
-
-
-draw_figure(graph_data_set_up())
-name = input('Please type in the station name that you want to see detailed report of. Hover over it to see name.')
-see_detail(name)
