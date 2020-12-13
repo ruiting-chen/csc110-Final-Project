@@ -6,8 +6,8 @@ from climate_sea_level_system import ClimateSeaLevelSystem
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 
 # When having trouble opening the graph, you can uncomment the following code and try again.
-import plotly.io as pio
-pio.renderers.default = "browser"
+# import plotly.io as pio
+# pio.renderers.default = "browser"
 
 
 # def generate_tempera() -> None:
