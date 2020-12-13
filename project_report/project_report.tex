@@ -84,9 +84,9 @@
     2. The dataset we use misses some sea level data (Maybe because the equipment at the stations malfunctioned or the stations hasn't been built yet at that time), which are replaced by negative numbers. Thus we write codes to delete them. When we run the linear regression function, these points are not included in the graph. As for the animation graph, they are set to be default white colour at the time when measurement is missing so that it will not miss lead viewers.\\
     3. Because of the temperature dataset we used and the sea level dataset we used are different sources, so we do not have temperature measurement at each specific station but an overall temperature anomalies of the whole world. Thus, we use temperature anomaly of the world for each stations. \\
     4. Based on our dataset, we have daily sea level data of each station and monthly temperature data. In order to compare them more intuitively, we have to compute the average sea level in each month. \\
-    5. When graphing .\\
-    6. It is unavoidable that these stations have different established years. Some stations may establish later than our start year (1880). Therefore, different stations has different linear regression graphs.\\
-    For our future exploration, we decide to show more details in our world map, like using pygame to draw an animation to show how sea level changes at our stations in selected period (from 1880 to 2020). In our world map, we use different colour(red and blue) to represent the rise or decline of the sea level. In our future assumption, we want to show more direct and intuitive information of sea level changes. Thus, we want to set a gradient to show how much the sea level changes. For stations which showed the rising sea level, we will use a gradient from yellow to red to illustrate the intensity of how much sea level raised. For stations which showed the falling sea level, we will use a gradient from light blue to dark blue to illustrate the intensity of how much sea-level falls. Then as the time passes by, we can see how the colour of area changes and then get more intuitive details.
+    5. When graphing, we restricted the time limit to pass 40 years because the first world meeting discussing about global warming was held 40 years ago. To recognize this fact and bring people's attenetion to the significance of global warming, we set the time duration of our animation graph to be 40 years.\\
+    6. It is unavoidable that these stations have different established years. Some stations may establish later than our start year (1980). Therefore, different stations has different linear regression graphs.\\
+    For our future exploration, we decide to show more details in our world map, like using pygame to draw an animation to show how sea level changes at our stations in selected period (from 1980 to 2020). In our world map, we use different colour(red and blue) to represent the rise or decline of the sea level. In our future assumption, we want to show more direct and intuitive information of sea level changes like using a gradient of colours to show different level of increase and decrease of sea level. For stations which showed the rising sea level, we will use a gradient from yellow to red to illustrate the intensity of how much sea level raised. For stations which showed the falling sea level, we will use a gradient from light blue to dark blue to illustrate the intensity of how much sea-level falls. Then as the time passes by, we can see how the colour of area changes and then get more intuitive details.
 
     \section*{References}
     \begin{enumerate}
@@ -117,6 +117,9 @@
         Hover Text and Formatting. (n.d.). Python | Plotly. https://plotly.com/python/hover-text-and-formatting/
         \item
         Multiple Axes. (n.d.). Python | Plotly. https://plotly.com/python/multiple-axes/
+        \item
+        World Climate Conference. (2020, August 25). Retrieved December 13, 2020, from\\
+        https://en.wikipedia.org/wiki/World\_Climate\_Conference
     \end{enumerate}
 
 % NOTE: LaTeX does have a built-in way of generating references automatically,

@@ -21,7 +21,7 @@ def graph_data_set_up() -> tuple:
     station_name = []
     num_station = len(system.get_station())
 
-    date_list = sorted(system.get_dates())[-360:]
+    date_list = sorted(system.get_dates())[-480:]
     starting_date = date_list[0]
 
     for date in date_list:
