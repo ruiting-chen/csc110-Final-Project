@@ -63,8 +63,8 @@ def main() -> None:
     GenerateTemperature().generate(system)
     GenerateStationAndSeaLevel().generate(system)
     draw_figure(graph_data_set_up())
-    see_regression()
-    print("Feel free to cal 'see_regression' if you want to see data about other stations.")
+    while True:
+        see_regression()
 
 
 if __name__ == '__main__':
