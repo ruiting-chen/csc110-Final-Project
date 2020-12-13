@@ -21,7 +21,7 @@ class ClimateSeaLevelSystem:
     #       This represents all the sea-levels in the system.
     #   - _stations: a mapping from station name to Station object.
     #       This represents all the stations in the system.
-    #   - _sea_level_dates: TODO: What is this???
+    #   - _sea_level_dates: A set of all dates associated with each sea level measurement.
 
     _temperatures: Dict[datetime.date, Temperature]
     _sea_levels: Dict[Tuple[datetime.date, str], SeaLevel]
@@ -47,7 +47,7 @@ class ClimateSeaLevelSystem:
         return self._stations
 
     def get_dates(self) -> set:
-        """TODO: Write docstring"""
+        """Return the set containing all dates associated with sea level measurement."""
         return self._sea_level_dates
 
     def find_min_temp(self) -> datetime.date:
