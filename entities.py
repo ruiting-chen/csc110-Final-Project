@@ -34,20 +34,3 @@ class Station:
     sea_level: dict
     min_height: float
     max_height: float
-
-
-# @dataclass
-# class SeaLevel:
-#     """Record the sea-level of a specific station at a specific date.
-#
-#         Instance Variable:
-#             - date: The date at when the sea-level is recorded.
-#             - height: The recorded height of sea-level.
-#             - station: The name of the station at where the sea-level is measured
-#
-#         Representation Invariance:
-#             - height > 0
-#         """
-#     date: datetime.date
-#     height: float
-#     station: str

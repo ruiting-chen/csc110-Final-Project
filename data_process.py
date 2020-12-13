@@ -2,7 +2,6 @@
 from typing import List, Any, Dict
 from bs4 import BeautifulSoup
 import requests
-import datetime
 from datapackage import Package
 
 

@@ -18,7 +18,6 @@ def get_compare(station: Station, system: ClimateSeaLevelSystem) -> list:
     temperatures = system.get_temp()
 
     base_month_sea = min(sea_levels.keys())
-    # base_month_temperature = system.find_min_temp()
     base_month_temperature = min(temperatures.keys())
 
     new_lst_temp = []
@@ -93,8 +92,6 @@ def extract_data(station: str, system: ClimateSeaLevelSystem) -> list:
     """Extract and process data from the input station and return a tuple containing the processed data to be used
     when drawing the linear regression.
     """
-    # generate_tempera()
-    # generate_sea(station)
     points_list = get_compare(system.get_station()[station], system)
     graphing_data = []
     for points in points_list:
