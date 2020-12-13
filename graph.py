@@ -16,7 +16,9 @@ generate_station = GenerateStationAndSeaLevel()
 
 def get_color(start_date: datetime.date, station: Station, height: float) -> str:
     """Return the colour representing the level of increasing/decreasing of the measured sea level at a station."""
-    starting_height = station.sea_level[start_date]
+
+    station_start_date = min([date for date in station.sea_level.keys() if date >= start_date])
+    starting_height = station.sea_level[station_start_date]
     colors = ['blue', 'red']
     if height <= starting_height:
         return colors[0]

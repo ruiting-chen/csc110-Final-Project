@@ -18,7 +18,8 @@ def get_compare(station: Station, system: ClimateSeaLevelSystem) -> list:
     temperatures = system.get_temp()
 
     base_month_sea = min(sea_levels.keys())
-    base_month_temperature = system.find_min_temp()
+    # base_month_temperature = system.find_min_temp()
+    base_month_temperature = min(temperatures.keys())
 
     new_lst_temp = []
     new_lst_sea = []

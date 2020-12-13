@@ -1,12 +1,9 @@
 """This python module contains all functions needed for extracting data from the internet and process these data."""
-from typing import List, Any, Dict, Tuple
+from typing import List, Any, Dict
 from bs4 import BeautifulSoup
 import requests
 import datetime
 from datapackage import Package
-from statistics import mean
-import urllib.request
-import csv
 
 
 def get_sea_level_data() -> List[List[str]]:
@@ -46,9 +43,6 @@ def process_sea_level_data() -> Dict[str, list]:
     return useful_data
 
 
-processed_sea_level_data = process_sea_level_data()
-
-
 def process_temperature_data() -> List[List[Any]]:
     """Return a list of Global component of Climate at a Glance (GCAG) data
     extracted from the website we found.
@@ -67,47 +61,3 @@ def process_temperature_data() -> List[List[Any]]:
         data[1] = float(data[1])
 
     return temp_lst
-
-
-def average(lst: List[List[Any]]) -> Dict[datetime.date, float]:
-    """Return a dictionary containing each month of each year that have valid measurements and
-             the average of all measurements during that month."""
-    average_dict = {}
-    for measure in lst:
-        year_month = datetime.date(measure[0].year, measure[0].month, 6)
-        if year_month not in average_dict:
-            average_dict[year_month] = [measure[1]]
-        else:
-            average_dict[year_month].append(measure[1])
-
-    for month in average_dict:
-        lst = average_dict[month]
-        average_dict[month] = mean(lst)
-
-    return average_dict
-
-
-def process_single_sea_level(station: str) -> Tuple[Dict[datetime.date, float], list]:
-    """This function will extract sea-level data from the internet.
-
-    This function will extract the corresponding sea-level data of the
-    input station name from the internet."""
-    csv_web = processed_sea_level_data[station][1]
-    csv_file = urllib.request.urlopen(csv_web)
-    lst_line = [line.decode('utf-8') for line in csv_file.readlines()]
-    read = csv.reader(lst_line)
-
-    # change the date of each data to datetime.date type
-    total_month_time_lst = []
-    useful_data_lst = []
-    for row in read:
-        month = datetime.date(int(row[0]), int(row[1]), 6)
-        total_month_time_lst.append(month)
-
-        # filter out outlier data: -32767
-        if int(row[3]) >= 0:
-            date = datetime.date(int(row[0]), int(row[1]), int(row[2]))
-            height = int(row[3])
-            useful_data_lst.append([date, height])
-
-    return (average(useful_data_lst), total_month_time_lst)

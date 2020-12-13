@@ -6,23 +6,23 @@ from climate_sea_level_system import ClimateSeaLevelSystem
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 
 # When having trouble opening the graph, you can uncomment the following code and try again.
-# import plotly.io as pio
-# pio.renderers.default = "browser"
+import plotly.io as pio
+pio.renderers.default = "browser"
 
 
-def generate_tempera() -> None:
-    """Generating temperatures based on the measurement collected."""
-    generate_temp.generate(system)
+# def generate_tempera() -> None:
+#     """Generating temperatures based on the measurement collected."""
+#     generate_temp.generate(system)
+#
+#
+# def generate_sea() -> None:
+#     """Generating all stations with its collected sea level data."""
+#     generate_station.generate(system)
 
 
-def generate_sea() -> None:
-    """Generating all stations with its collected sea level data."""
-    generate_station.generate(system)
-
-
-def see_detail(station: str) -> None:
-    """Invoke the go_plot function in the linear_regression module and pass in the station name for it."""
-    go_plot(station, system)
+# def see_detail(station: str) -> None:
+#     """Invoke the go_plot function in the linear_regression module and pass in the station name for it."""
+#     go_plot(station, system)
 
 
 def graph_data_set_up() -> tuple:
@@ -58,16 +58,6 @@ def graph_data_set_up() -> tuple:
     return (num_station, color, dates, x, y, station_name)
 
 
-def main() -> None:
-    """The main function that integrates everything in this project and show the animation graph. It also calls
-    see_regression function to show the linear regression."""
-    generate_tempera()
-    generate_sea()
-    draw_figure(graph_data_set_up())
-    see_regression()
-    print("Feel free to cal 'see_regression' if you want to see data about other stations.")
-
-
 def see_regression() -> None:
     """A helper function for the main function.
 
@@ -79,14 +69,27 @@ def see_regression() -> None:
         print(f'The input station name {station} is invalid, please try again.')
         station = input('Please type in the station name that you want to see detailed report of. '
                         'Hover over it to see name.')
-    see_detail(station)
+    # see_detail(station)
+    go_plot(station, system)
+
+
+def main() -> None:
+    """The main function that integrates everything in this project and show the animation graph. It also calls
+    see_regression function to show the linear regression."""
+    # generate_tempera()
+    # generate_sea()
+    GenerateTemperature().generate(system)
+    GenerateStationAndSeaLevel().generate(system)
+    draw_figure(graph_data_set_up())
+    see_regression()
+    print("Feel free to cal 'see_regression' if you want to see data about other stations.")
 
 
 if __name__ == '__main__':
     # Created instances for the next two functions.
     system = ClimateSeaLevelSystem()
-    generate_temp = GenerateTemperature()
-    generate_station = GenerateStationAndSeaLevel()
+    # generate_temp = GenerateTemperature()
+    # generate_station = GenerateStationAndSeaLevel()
 
     # Run the main function.
     main()
