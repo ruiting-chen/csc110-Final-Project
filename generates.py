@@ -57,8 +57,8 @@ class GenerateStationAndSeaLevel(EntityGenerator):
         """
         station_dict = self._processed_sea_level_data.keys()
         for station in station_dict:
-            # When you want to see all stations, comment out the next two lines of code(the if... break code).
-            # Warning: It is going to take very long to run because there are too many stations.
+            # Warning: when allowing too many stations to be added, sometimes the
+            # web-browser will time out and nothing will be shown.
             if len(system.get_station()) >= 20:
                 break
             location = self._processed_sea_level_data[station][0]
