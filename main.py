@@ -50,13 +50,11 @@ def graph_data_set_up() -> tuple:
                 colour = 'white'
             else:
                 colour = get_color(starting_date, station_obj, station_obj.sea_level[date])
-                # print(colour)
             x.append(la)
             y.append(lon)
             station_name.append(f'Name of station: {station}')
             inner_lst.append(colour)
         color.append(inner_lst)
-        # print(color)
     return (num_station, color, dates, x, y, station_name)
 
 

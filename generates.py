@@ -35,11 +35,14 @@ class GenerateStationAndSeaLevel(EntityGenerator):
     def generate(self, system: ClimateSeaLevelSystem) -> None:
         """Mutate system by generating all stations.
 
-        For now, the number of stations generated is limited to 2.
+        For now, the number of stations generated is limited to 20.
+        If you want to see more, feel free to change it.
+
+        Please note, it takes long to generate more stations.
         """
         station_dict = processed_sea_level_data.keys()
         for station in station_dict:
-            if len(system.get_station()) >= 2:
+            if len(system.get_station()) >= 20:
                 break
             location = processed_sea_level_data[station][0]
             sea_level = process_single_sea_level(station)
