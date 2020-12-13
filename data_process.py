@@ -33,8 +33,8 @@ def process_sea_level_data() -> Dict[str, list]:
     useful_data = {}
     for data in all_data:
 
-        # filter out sea-level data that started recording after year 1990
-        if int(data[6][:4]) < 1990:
+        # filter out sea-level data that started recording after year 1980
+        if int(data[6][:4]) < 1980:
             # store the latitude, longitude and csv url of each list of
             # sea level data in useful_data dictionary
             location_and_url = [(float(data[5]), float(data[4])), data[8]]

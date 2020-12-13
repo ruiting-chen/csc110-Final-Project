@@ -21,6 +21,10 @@ def graph_data_set_up() -> tuple:
     station_name = []
     num_station = len(system.get_station())
 
+    # The started year of our animation has been set to 40 years ago (480 months ago)
+    # You can change this if you like.
+    # Warning: when allowing too many years are processed, sometimes the
+    #          web-browser will time out and nothing will be shown.
     date_list = sorted(system.get_dates())[-480:]
     starting_date = date_list[0]
 
