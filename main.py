@@ -63,6 +63,7 @@ def main() -> None:
     GenerateTemperature().generate(system)
     GenerateStationAndSeaLevel().generate(system)
     draw_figure(graph_data_set_up())
+    # run see_regression non-stop so you can see linear regressions as much as you would like.
     while True:
         see_regression()
 
