@@ -76,6 +76,19 @@
     Using plotly to draw animation is also appropriate because it reflects how sea level has changed in the recorded time period. This will give us valuable intuition on the data and also the importance of climate change. For example, when you see that as time passes, more and more stations become red, you will immediately realize the significance of climate change on our world and how less time we have. Thus, by viewing the animation, one will realize that the problem of climate change is something that we must treat seriously.
 
 
+    \section*{Instructions of obtaining data sets and running our program}
+
+    1. Install all the python libraries we listed in requirement.txt. To download BeautifulSoup4, request, datapackage, a direct way to install them is that you can open the file named "data\_process.py" and then move to these libraries for a while, it will pop up a reminder and then click installation.\\
+    2. In our file named "data\_process.py", we have already provided functions to extract our datasets. Therefore, you do not need to download them from provided website. You can call the functions in this file to see what our datasets look like. \\
+    3. When you finish the previous steps, you can open the file "main.py" and run it in python console. After all the temperature and selected stations are added, you can see a world map with 20 plots on it, which represent the stations. Our starting time is 1990-12. You can drag the timeline below to see the color changes of the stations. To illustrate the graph of given station, you need to type in the station name that you want to see the detailed report of in the python console (the name you type in must be the station added in the world map). Then you could see two linear regression: the blue one is the relationship between year and sea level, the red one is year and temperature anomalies. If you want to know the exact sea level or temperature of a month, move your mouse to the plot and then you can see the figure of sea level or temperature.
+
+
+    \section*{Any Changes of Our Project Plan}
+
+    Initially, we only focus on the relationship of year and sea level, trying to draw the regression line to show the climate change. However, we cannot easily concluded that sea level change around the world due to climate change. We need to illustrate the temperature changes in these years and then compare them with sea level changes. Therefore, we decided to draw two regression lines in one graph in order to compare them more intuitively.\\
+    Besides, we also wanted to draw histogram to demonstrate the number of stations that report the sea level in a certain range at that certain year. After discussion, we changed our method and decided to create scatter plots on a world map to achieve this goal. In our final project, we use different color of a point to represent a station which its sea level below or above a certain height. When you drag the timeline, you can see the color change of these points. It is more intuitive and concise than histogram.
+
+
     \section*{Discussion}
 
     After finishing our programs and running our codes, we get the astonishing results: from December 1990 to August 2007, as the temperature rising, there were many stations turning "red", which indicated that overall sea level showed a rising trend especially in Atlantic Ocean and North Pacific Ocean. Fortunately, in the recent 13 years, several stations have returned to normal "blue" due to the fact that many countries dedicate to tackle global warning by taking several methods like eliminating the emission of $CO_2$. We also find an interesting fact that at both poles of the earth, as the temperature rising, sea level shows a falling trend, which is an abnormal phenomenon.\\
