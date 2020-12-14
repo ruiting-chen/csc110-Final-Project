@@ -1,7 +1,7 @@
 """The main python module that integrate the whole projects can complete all its functions.
 It generates data, draw animation graph and linear regression graph."""
-from graph import draw_figure, get_color
 from linear_regression import go_plot
+from graph import go_figure
 from climate_sea_level_system import ClimateSeaLevelSystem
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 
@@ -10,44 +10,7 @@ from generates import GenerateTemperature, GenerateStationAndSeaLevel
 # pio.renderers.default = "browser"
 
 
-def graph_data_set_up() -> tuple:
-    """Set up all the datq for drawing the animation graph.
-
-    It set up the color, location, name, and dates of each station as well as the total number of stations."""
-    dates = []
-    x = []
-    y = []
-    color = []
-    station_name = []
-    num_station = len(system.get_station())
-
-    # The started year of our animation has been set to 40 years ago (480 months ago)
-    # You can change this if you like.
-    # Warning: when allowing too many years are processed, sometimes the
-    #          web-browser will time out and nothing will be shown.
-    date_list = sorted(system.get_dates())[-480:]
-    starting_date = date_list[0]
-
-    for date in date_list:
-        dates.append(f'{date.year}-{date.month}')
-        inner_lst = []
-        for station in system.get_station():
-            station_obj = system.get_station()[station]
-            lon = station_obj.location[0]
-            la = station_obj.location[1]
-            if date not in station_obj.sea_level:
-                colour = 'white'
-            else:
-                colour = get_color(starting_date, station_obj, station_obj.sea_level[date])
-            x.append(la)
-            y.append(lon)
-            station_name.append(f'Name of station: {station}')
-            inner_lst.append(colour)
-        color.append(inner_lst)
-    return (num_station, color, dates, x, y, station_name)
-
-
-def see_regression() -> None:
+def see_regression(system: ClimateSeaLevelSystem) -> None:
     """A helper function for the main function.
 
     On its own, it shows the linear regression of all data collected at the input station."""
@@ -64,17 +27,23 @@ def see_regression() -> None:
 def main() -> None:
     """The main function that integrates everything in this project and show the animation graph. It also calls
     see_regression function to show the linear regression."""
-    GenerateTemperature().generate(system)
-    GenerateStationAndSeaLevel().generate(system)
-    draw_figure(graph_data_set_up())
-    # run see_regression non-stop so you can see linear regressions as much as you would like.
-    while True:
-        see_regression()
-
-
-if __name__ == '__main__':
     # Created instances for the next two functions.
     system = ClimateSeaLevelSystem()
 
+    GenerateTemperature().generate(system)
+    GenerateStationAndSeaLevel().generate(system)
+    go_figure(system)
+    print("RED color on the graph means the current sea level/temperature anomaly value is "
+          "ABOVE the original sea level/temperature")
+    print("BLUE color on the graph means the current sea level/temperature anomaly value is "
+          "BELOW or EQUAL to the original sea level/temperature")
+    print()
+    # run see_regression non-stop so you can see linear regressions as much as you would like.
+    while True:
+        see_regression(system)
+
+
+if __name__ == '__main__':
     # Run the main function.
+    # If yu don't see graphs showing, please close your browser and try again
     main()

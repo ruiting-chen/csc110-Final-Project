@@ -1,35 +1,41 @@
-"""This python module contains all functions needed to draw the linear regression of a cretain station."""
+"""This python module contains all functions needed to draw the linear regression of a given station."""
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from entities import Station
 from climate_sea_level_system import ClimateSeaLevelSystem
 
 
-# When having trouble opening the graph, you can uncomment the following code and try again.
-# import plotly.io as pio
-# pio.renderers.default = "browser"
-
-
-def get_compare(station: Station, system: ClimateSeaLevelSystem) -> list:
-    """Return a list containing the temperature data and the sea level data at the input station (if any).
+def get_temp_sea_level(station: Station, system: ClimateSeaLevelSystem) -> tuple:
+    """Return a tuple containing the temperature data and the sea level data at the input station (if any).
 
     The temperature data is universal, whereas the sea level data is for the input station."""
-    sea_levels = station.sea_level
-    temperatures = system.get_temp()
+    sea_level_data = station.sea_level
+    temperature_data = system.get_temp()
 
-    base_month_sea = min(sea_levels.keys())
-    base_month_temperature = min(temperatures.keys())
+    base_month_sea = min(sea_level_data.keys())
+    base_month_temperature = min(temperature_data.keys())
 
-    new_lst_temp = []
-    new_lst_sea = []
-    for month in temperatures:
-        interval_temp = (month - base_month_temperature).days
-        if month in sea_levels:
+    temperature_intervals = []
+    temperature_values = []
+    temperature_dates = []
+    sea_level_intervals = []
+    sea_level_values = []
+    sea_level_dates = []
+
+    for month in temperature_data:
+        if month in sea_level_data:
             interval_sea = (month - base_month_sea).days
-            new_lst_sea.append((interval_sea, sea_levels[month], month))
-        new_lst_temp.append((interval_temp, temperatures[month].temperature, month))
+            sea_level_intervals.append(interval_sea)
+            sea_level_values.append(sea_level_data[month])
+            sea_level_dates.append(month)
 
-    return [new_lst_temp, new_lst_sea]
+        interval_temp = (month - base_month_temperature).days
+        temperature_intervals.append(interval_temp)
+        temperature_values.append(temperature_data[month].temperature)
+        temperature_dates.append(month)
+
+    return ((temperature_intervals, temperature_values, temperature_dates),
+            (sea_level_intervals, sea_level_values, sea_level_dates))
 
 
 def evaluate_line(a: float, b: float, x: float) -> float:
@@ -38,28 +44,17 @@ def evaluate_line(a: float, b: float, x: float) -> float:
     return a + b * x
 
 
-def convert_points(points: list) -> tuple:
-    """Return a tuple of two lists, containing the x- and y-coordinates of the given points.
-
-    Precondition:
-        - points is a list of tuples, where each tuple is a list of floats.
-    """
-    list_of_x = [x[0] for x in points]
-    list_of_y = [x[1] for x in points]
-    return (list_of_x, list_of_y)
-
-
-def simple_linear_regression(points: list) -> tuple:
+def simple_linear_regression(point_tuple: tuple) -> tuple:
     """Perform a linear regression on the given points.
 
     This function returns a pair of floats (a, b) such that the line
     y = a + bx is the approximation of this data.
     """
-    converted_version = convert_points(points)
-    average_x = find_average(converted_version[0])
-    average_y = find_average(converted_version[1])
-    b_numerator = sum([(x[0] - average_x) * (x[1] - average_y) for x in points])
-    b_denominator = sum([(x[0] - average_x) ** 2 for x in points])
+    average_x = find_average(point_tuple[0])
+    average_y = find_average(point_tuple[1])
+    b_numerator = sum([(point_tuple[0][i] - average_x) * (point_tuple[1][i] - average_y)
+                       for i in range(len(point_tuple[0]))])
+    b_denominator = sum([(x - average_x) ** 2 for x in point_tuple[0]])
     b = b_numerator / b_denominator
     a = average_y - b * average_x
     return (a, b)
@@ -92,26 +87,25 @@ def extract_data(station: str, system: ClimateSeaLevelSystem) -> list:
     """Extract and process data from the input station and return a tuple containing the processed data to be used
     when drawing the linear regression.
     """
-    points_list = get_compare(system.get_station()[station], system)
+    points_tuple = get_temp_sea_level(system.get_station()[station], system)
     graphing_data = []
-    for points in points_list:
-        new_points = [(tup[2], tup[1]) for tup in points]
-        separated_coordinates = convert_points(new_points)
-        x_coords = separated_coordinates[0]
+    for point_tuple in points_tuple:
+        x_coords = point_tuple[2]
+        y_coords = point_tuple[1]
         x_min = min(x_coords)
         x_max = max(x_coords)
-        num_tup = convert_points(points)
-        y_max = max(num_tup[0])
-        y_coords = separated_coordinates[1]
+
+        max_interval = max(point_tuple[0])
 
         # Do a simple linear regression. Returns the (a, b) constants for
         # the line y = a + b * x.
-        model = simple_linear_regression(points)
+        model = simple_linear_regression(point_tuple)
         a = model[0]
         b = model[1]
+        r = calculate_r_squared(point_tuple, a, b)
 
         # Plot all the data points AND a line based on the regression
-        graphing_data.append((x_coords, y_coords, a, b, x_min, x_max, y_max, num_tup))
+        graphing_data.append((x_coords, y_coords, a, b, x_min, x_max, max_interval, r))
     return graphing_data
 
 
@@ -131,23 +125,19 @@ def plot(tmp: tuple, sea: tuple, station: str) -> None:
     fig.add_trace(go.Scatter(x=sea[0], y=sea[1], mode='markers', marker={'color': 'green'}, name='Sea Level Data'),
                   secondary_y=True)
 
-    # Add the regression line for temperature data
-    r = calculate_r_squared(tmp[-1], tmp[2], tmp[3])
+    # Add the regression line and R^2 value for temperature data
     fig.add_trace(go.Scatter(x=[tmp[4], tmp[5]], y=[evaluate_line(tmp[2], tmp[3], 0),
                                                     evaluate_line(tmp[2], tmp[3], tmp[6])],
                              mode='lines', marker={'color': 'red'},
-                             name=f'Temperature Anomalies Regression line R^2 = {r}'), secondary_y=False)
+                             name=f'Temperature Anomalies Regression line R^2 = {tmp[-1]}'), secondary_y=False)
 
-    # Add the regression line for sea level data
-    r = calculate_r_squared(sea[-1], sea[2], sea[3])
+    # Add the regression line and R^2 value for sea level data
     fig.add_trace(go.Scatter(x=[sea[4], sea[5]], y=[evaluate_line(sea[2], sea[3], 0),
                                                     evaluate_line(sea[2], sea[3], sea[6])],
                              mode='lines', marker={'color': 'DarkBlue'},
-                             name=f'Sea Level Regression line R^2 = {r}'), secondary_y=True)
+                             name=f'Sea Level Regression line R^2 = {sea[-1]}'), secondary_y=True)
 
-    fig.update_layout(
-        title_text=f'Station {station} Sea Level And Temperature Data'
-    )
+    fig.update_layout(title_text=f'Station {station} Sea Level And Temperature Data')
 
     fig.update_xaxes(title_text="Year")
 
