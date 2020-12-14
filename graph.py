@@ -17,7 +17,7 @@ def get_color(start_date: datetime.date, station: Station, height: float, ) -> s
         return colors[1]
 
 
-def get_land_color(system: ClimateSeaLevelSystem, start_date: datetime.date, current_date: datetime.date):
+def get_ocean_color(system: ClimateSeaLevelSystem, start_date: datetime.date, current_date: datetime.date):
     """Return the colour representing the level of increasing/decreasing of the
     temperature anomaly at a given time"""
     colors = ['LightBlue', 'lightpink']
@@ -41,7 +41,7 @@ def graph_data_set_up(system: ClimateSeaLevelSystem) -> tuple:
     x = []
     y = []
     station_color = []
-    land_color = []
+    ocean_color = []
     station_name = []
     num_station = len(system.get_station())
 
@@ -68,13 +68,13 @@ def graph_data_set_up(system: ClimateSeaLevelSystem) -> tuple:
             station_name.append(f'Name of station: {station}')
             inner_lst.append(color)
         station_color.append(inner_lst)
-        land_color.append(get_land_color(system, starting_date, date))
-    return (num_station, station_color, land_color, dates, x, y, station_name)
+        ocean_color.append(get_ocean_color(system, starting_date, date))
+    return (num_station, station_color, ocean_color, dates, x, y, station_name)
 
 
 def draw_figure(tup: tuple) -> None:
     """The function to draw the animation graph."""
-    num_station, station_color, land_color, dates, x, y, station_name = tup
+    num_station, station_color, ocean_color, dates, x, y, station_name = tup
     fig_dict = {
         "data": [],
         "layout": {},
@@ -103,7 +103,7 @@ def draw_figure(tup: tuple) -> None:
                         marker={'color': station_color[0]}, hovertext=station_name)
 
     fig_dict["data"].append(fig)
-    fig_dict["layout"]["geo"] = {'showland': True, 'landcolor': "LightBlue"}
+    fig_dict["layout"]["geo"] = {'showland': True, 'showocean': True, 'landcolor': "burlywood", 'oceancolor': "LightBlue"}
     fig_dict["layout"]["sliders"] = [sliders_dict]
     fig_dict["layout"]["title_text"] = f'Global Sea Level and Temperature Data'
 
@@ -114,7 +114,7 @@ def draw_figure(tup: tuple) -> None:
                             lon=y[num_station * i: num_station * i + num_station],
                             mode='markers', marker={'color': station_color[i]},
                             hovertext=station_name)
-        frame = {"data": fig, 'name': dates[i], 'layout': {'geo': {'landcolor': land_color[i]}}}
+        frame = {"data": fig, 'name': dates[i], 'layout': {'geo': {'oceancolor': ocean_color[i]}}}
 
         fig_dict["frames"].append(frame)
 
