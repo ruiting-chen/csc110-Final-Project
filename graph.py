@@ -103,7 +103,8 @@ def draw_figure(tup: tuple) -> None:
                         marker={'color': station_color[0]}, hovertext=station_name)
 
     fig_dict["data"].append(fig)
-    fig_dict["layout"]["geo"] = {'showland': True, 'showocean': True, 'landcolor': "burlywood", 'oceancolor': "LightBlue"}
+    fig_dict["layout"]["geo"] = {'showland': True, 'showocean': True, 'landcolor': "burlywood",
+                                 'oceancolor': "LightBlue"}
     fig_dict["layout"]["sliders"] = [sliders_dict]
     fig_dict["layout"]["title_text"] = f'Global Sea Level and Temperature Data'
 
