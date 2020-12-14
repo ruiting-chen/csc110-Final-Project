@@ -6,8 +6,8 @@ from climate_sea_level_system import ClimateSeaLevelSystem
 from generates import GenerateTemperature, GenerateStationAndSeaLevel
 
 # When having trouble opening the graph, you can uncomment the following code and try again.
-# import plotly.io as pio
-# pio.renderers.default = "browser"
+import plotly.io as pio
+pio.renderers.default = "browser"
 
 
 def see_regression(system: ClimateSeaLevelSystem) -> bool:
@@ -38,9 +38,12 @@ def main() -> None:
     GenerateTemperature().generate(system)
     GenerateStationAndSeaLevel().generate(system)
     go_figure(system)
-    print("RED color on the graph means the current sea level/temperature anomaly value is "
+    print()
+    print('The color in the ocean represents the temperature anomaly at a given time')
+    print('The color of each dot represents the sea level at a given station at a given time')
+    print("REDDISH color on the graph means the current sea level/temperature anomaly value is "
           "ABOVE the original sea level/temperature")
-    print("BLUE color on the graph means the current sea level/temperature anomaly value is "
+    print("BLUEISH color on the graph means the current sea level/temperature anomaly value is "
           "BELOW or EQUAL to the original sea level/temperature")
     print()
 
